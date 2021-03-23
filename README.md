@@ -1,2 +1,1 @@
-# wms
-Warehouse Managment System
+# Warehouse Managment System
