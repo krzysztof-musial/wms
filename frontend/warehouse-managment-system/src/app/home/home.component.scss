@@ -1,0 +1,15 @@
+@use '../../assets/styles/' as *;
+nav {
+    max-width: $width-big;
+    margin: auto;
+    padding: 1rem;
+    @include flex(row, space-between, center);
+    ul {
+        list-style: none;
+        @include flex(row, flex-start, center);
+        li {
+            margin-left: 1rem;
+            cursor: pointer;
+        }
+    }
+}

@@ -1,0 +1,5 @@
+@use '../../assets/styles/' as *;
+main {
+    min-height: $height-100;
+    @include flex(row, center, center);
+}

@@ -1,1 +1,28 @@
-<p>register works!</p>
+<main>
+    <div class="card">
+        <div class="card__img">
+            <app-logo [logo]="'logo'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo>
+        </div>
+        <div class="card__title">
+            Create new account
+        </div>
+        <div class="card__content">
+            <form class="form">
+                <div class="form__content">
+                    <div class="input-grid">
+                        <input type="text" placeholder="First Name">
+                        <input type="text" placeholder="Last Name">
+                    </div>
+                    <input type="email" placeholder="Email">
+                    <input type="password" placeholder="Password">
+                    <input type="password" placeholder="Confirm password">
+                    <div class="input-flex">
+                        <input type="checkbox" id="agrement" name="agrement">
+                        <label for="agrement" class="font-size-small">I agree to the <span class="font-color-blue">Privacy Policy</span> and <span class="font-color-blue">Terms of Use</span>.</label>
+                    </div>
+                </div>
+                <input class="button" type="submit" value="Register" disabled>
+            </form>
+        </div>
+    </div>
+</main>

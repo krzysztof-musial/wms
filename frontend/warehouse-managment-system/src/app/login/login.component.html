@@ -1,1 +1,20 @@
-<p>login works!</p>
+<main>
+    <div class="card">
+        <div class="card__img">
+            <app-logo [logo]="'logo'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo>
+        </div>
+        <div class="card__title">
+            Login to your account
+        </div>
+        <div class="card__content">
+            <form class="form">
+                <div class="form__content">
+                    <input type="email" placeholder="Email">
+                    <input type="password" placeholder="Password">
+                    <a href="#" class="font-size-small font-weight-bold font-color-blue">• Forgot password?</a>
+                </div>
+                <input class="button" type="submit" value="Login" disabled>
+            </form>
+        </div>
+    </div>
+</main>
