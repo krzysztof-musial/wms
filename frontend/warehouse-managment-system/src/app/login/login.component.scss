@@ -3,3 +3,10 @@ main {
     min-height: $height-100;
     @include flex(row, center, center);
 }
+
+@media (max-width: $width-small) {
+    .card {
+        border: none;
+        padding: 0;
+    }
+}

@@ -6,3 +6,10 @@ main {
         max-width: 370px;
     }
 }
+
+@media (max-width: $width-small) {
+    .card {
+        border: none;
+        padding: 0;
+    }
+}
