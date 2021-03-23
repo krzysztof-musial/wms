@@ -1,0 +1,8 @@
+@use '../../../../assets/style/' as *;
+.status {
+    background: $color-dark;
+    color: white;
+    padding: .5rem 1rem;
+    text-align: center;
+    font-size: .8rem;
+}
