@@ -9,7 +9,10 @@
 html {
     font-size: $font-size;
 }
-main {
+// main {
+//     // padding: $spacing;
+// }
+section {
     padding: $spacing;
 }
 // Typography
@@ -25,6 +28,12 @@ a {
         &-small {
             font-size: .8rem;
         }
+        &-normal {
+            font-size: 1rem;
+        }
+        &-big {
+            font-size: 1.5rem;
+        }
     }
     &-weight {
         &-light {
@@ -35,6 +44,9 @@ a {
         }
         &-bold {
             font-weight: 500;
+        }
+        &-black {
+            font-weight: 600;
         }
     }
     &-color {
@@ -77,6 +89,14 @@ a {
 }
 .button {
     @include button;
+    &.fill {
+        background: $color-blue;
+        border: $color-blue;
+        color: $color-white;
+        &:hover {
+            opacity: .9;
+        }
+    }
 }
 .card {
     padding: 3rem;

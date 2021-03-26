@@ -1,4 +1,4 @@
-<div *ngIf="logo == 'logo'">
+<div *ngIf="logo == 'big'">
     <svg class="logo" width="111" height="30" fill="none" viewBox="0 0 111 30" [routerLink]="['/']">
         <g class="logo_big">
           <g class="logo__icon">
@@ -11,6 +11,18 @@
           </g>
         </g>
     </svg>
+</div>
+
+<div *ngIf="logo == 'small'">
+  <svg width="30" height="30" fill="none" viewBox="0 0 30 30">
+    <g class="logo_small">
+      <g class="logo__icon">
+        <path [attr.fill]="colorIcon" d="M26.505 7.275c.67-.353.67-1.235 0-1.588L15.93.123a1.092 1.092 0 00-1.007 0L4.522 5.595c-.671.353-.671 1.236 0 1.588l10.575 5.564c.311.164.694.164 1.006 0l10.402-5.472z" class="logo__image"/>
+        <path [attr.fill]="colorIcon" d="M12.576 28.919c.67.353 1.509-.088 1.509-.794V15.567a.905.905 0 00-.503-.794L2.414 8.898c-.67-.353-1.51.088-1.51.794v12.557c0 .328.193.63.504.794l11.168 5.876z" class="logo__image_2"/>
+        <path [attr.fill]="colorIcon" d="M29.948 9.874c0-.706-.838-1.147-1.51-.794l-11.167 5.876a.905.905 0 00-.503.794v12.375c0 .706.838 1.147 1.509.794l11.168-5.876a.905.905 0 00.503-.794V9.874z" class="logo__image_3"/>
+      </g>
+    </g>
+  </svg>
 </div>
 
 <div *ngIf="logo == 'icon'">
