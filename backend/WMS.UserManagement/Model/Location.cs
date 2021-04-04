@@ -7,17 +7,22 @@ using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
-    public class Warehouse
+    public class Location
     {
-        [Column("warehouse_id")]
+        [Column("location_id")]
         public int Id { get; set; }
-        [Column("warehouse_name")]
+        [Column("warehouse_id")]
         [Required]
-        public string Name { get; set; }
-        [Column("warehouse_created_on")]
+        public Warehouse WarehouseId { get; set; }
+        [Column("location_code")]
+        [Required]
+        public string Code { get; set; }
+        [Column("location_created_on")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+
         public DateTime CreatedOn { get; }
-        [Column("warehouse_modified_on")]
+        [Column("location_modified_on")]
+
         public DateTime ModifiedOn { get; }
     }
 }

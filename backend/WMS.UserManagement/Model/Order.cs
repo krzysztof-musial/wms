@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
-    public class Warehouse
+    [Table("order")]
+    public class Order
     {
-        [Column("warehouse_id")]
+        [Column("order_id")]
         public int Id { get; set; }
-        [Column("warehouse_name")]
+        [Column("company_id")]
         [Required]
+        public Company CompanyId { get; set; }
+        [Column("order_name")]
         public string Name { get; set; }
-        [Column("warehouse_created_on")]
+        [Column("order_created_on")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedOn { get; }
-        [Column("warehouse_modified_on")]
+        [Column("order_modified_on")]
         public DateTime ModifiedOn { get; }
     }
 }

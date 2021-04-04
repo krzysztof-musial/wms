@@ -17,5 +17,9 @@ namespace WMS.UserManagement.DTO
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

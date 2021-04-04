@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WMS.UserManagement.Model
 {
@@ -6,5 +7,6 @@ namespace WMS.UserManagement.Model
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public Warehouse WarehouseId { get; set; }
     }
 }

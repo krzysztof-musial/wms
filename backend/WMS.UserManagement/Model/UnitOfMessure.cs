@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
-    public class Warehouse
+    [Table("uom")]
+    public class UnitOfMessure
     {
-        [Column("warehouse_id")]
+        [Column("uom_id")]
         public int Id { get; set; }
-        [Column("warehouse_name")]
-        [Required]
+        [Column("uom_name")]
         public string Name { get; set; }
-        [Column("warehouse_created_on")]
+        [Column("uom_created_on")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedOn { get; }
-        [Column("warehouse_modified_on")]
+        [Column("uom_modified_on")]
         public DateTime ModifiedOn { get; }
     }
 }
