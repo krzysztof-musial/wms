@@ -4,9 +4,13 @@
     <nav>
       <app-logo [logo]="'big'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo>
       <!-- <app-logo [logo]="'small'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo> -->
-      <ul>
+      <ul *ngIf="!auth.authCheck()">
           <li class="font-color-blue font-weight-bold" [routerLink]="['/login']">Login</li>
           <li class="button" [routerLink]="['/register']">Register</li>
+      </ul>
+      <ul *ngIf="auth.authCheck()">
+          <li class="button fill" [routerLink]="['/app']">App</li>
+          <li class="button" (click)="auth.logout()">Logout</li>
       </ul>
     </nav>
   </section>
