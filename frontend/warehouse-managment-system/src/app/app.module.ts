@@ -8,6 +8,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { StatusComponent } from './shared/components/status/status.component';
 import { LogoComponent } from './shared/components/logo/logo.component';
+import { ApplicationComponent } from './application/application.component';
+import { SetupComponent } from './application/setup/setup.component';
+import { DashboardComponent } from './application/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { LogoComponent } from './shared/components/logo/logo.component';
     LoginComponent,
     RegisterComponent,
     StatusComponent,
-    LogoComponent
+    LogoComponent,
+    ApplicationComponent,
+    SetupComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
