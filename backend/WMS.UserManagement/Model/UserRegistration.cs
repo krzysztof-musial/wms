@@ -24,18 +24,5 @@ namespace WMS.UserManagement.Model
         {
             return Password == PasswordConfirmation;
         }
-
-        public bool IsEmailCorrect()
-        {
-            try
-            {
-                MailAddress m = new MailAddress(Username);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }

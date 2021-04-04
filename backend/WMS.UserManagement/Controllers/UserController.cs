@@ -91,7 +91,7 @@ namespace WMS.UserManagement.Controllers
                     Message = "User is already registered"
                 });
             }
-
+            
             User userToRegister = new User
             {
                 Email = userRegistration.Username,
