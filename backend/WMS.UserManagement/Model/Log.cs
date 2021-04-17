@@ -17,6 +17,7 @@ namespace WMS.UserManagement.Model
         public int WarehouseId { get; set; }
         [Column("log_message")]
         [Required]
+        [DataType("text")]
         public string Message { get; set; }
         [Column("log_created_on")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

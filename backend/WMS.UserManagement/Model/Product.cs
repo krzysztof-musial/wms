@@ -12,13 +12,13 @@ namespace WMS.UserManagement.Model
         public string Id { get; set; }
         [Column("warehouse_id")]
         [Required]
-        public Warehouse WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
         [Column("company_id")]
         [Required]
-        public Company CompanyId { get; set; }
+        public Company Company { get; set; }
         [Column("uom_id")]
         [Required]
-        public UnitOfMessure UnitOfMessureId { get; set; }
+        public UnitOfMessure UnitOfMessure { get; set; }
         [Column("product_name")]
         [Required]
         public string Name { get; set; }

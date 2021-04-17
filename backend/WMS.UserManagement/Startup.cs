@@ -52,11 +52,11 @@ namespace WMS.UserManagement
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
-                    ValidIssuer = "wmsdemo",
-                    ValidAudience = "wmsdemo",
+                    //ValidIssuer = Configuration["Authentication:ValidIssuer"],
+                    //ValidAudience = Configuration["Authentication:ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:Secret"]))
                 };
             });
@@ -80,6 +80,8 @@ namespace WMS.UserManagement
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

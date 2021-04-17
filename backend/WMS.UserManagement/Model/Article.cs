@@ -11,10 +11,10 @@ namespace WMS.UserManagement.Model
         public int Id { get; set; }
         [Column("product_id")]
         [Required]
-        public Product ProductId { get; set; }
+        public Product Product { get; set; }
         [Column("location_id")]
         [Required]
-        public Location LocationId { get; set; }
+        public Location Location { get; set; }
         [Column("article_quantity")]
         [Required]
         public decimal Quantity { get; set; }

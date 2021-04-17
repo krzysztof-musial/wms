@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WMS.UserManagement.Model;
 
@@ -14,6 +15,7 @@ namespace WMS.UserManagement.Controllers
     public class ValuesController : ControllerBase
     {
         // GET: api/<ValuesController>
+        [Authorize]
         [HttpGet]
         public IEnumerable<UserLogin> Get()
         {

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WMS.UserManagement.Model;
+using WMS.UserManagement.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -20,11 +22,13 @@ namespace WMS.UserManagement.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly WarehouseManagementSystemDataContext _dbContext;
 
-        public UserController(IConfiguration configuration, UserManager<User> userManager)
+        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext)
         {
             _configuration = configuration;
-            this._userManager = userManager;
+            _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         [HttpPost]
@@ -37,16 +41,25 @@ namespace WMS.UserManagement.Controllers
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, userLogin.Password);
                 if(passwordCheck)
                 {
+                    
                     SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]));
 
                     IEnumerable<Claim> claims = new Claim[] { };
                     claims.Append<Claim>(new Claim("userId", user.Id));
+
+                    var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
+                    int? warehouseId = warehouse?.Id;
+
+
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new[]
                             { 
                             new Claim("userId", user.Id),
-                            new Claim("username", user.UserName)
+                            new Claim("userEmail", user.Email),
+                            new Claim("userFirstName", user.FirstName),
+                            new Claim("userLastName", user.LastName),
+                            new Claim("warehouseId", warehouseId.ToString())
                             }
                         ),
                         SigningCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
@@ -54,17 +67,15 @@ namespace WMS.UserManagement.Controllers
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var stoken = tokenHandler.CreateToken(tokenDescriptor);
                     var token = new JwtSecurityToken(
-                        issuer: _configuration["JWT:ValidIssuer"],
-                        audience: _configuration["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddHours(1),
+                        issuer: _configuration["Authentication:ValidIssuer"],
+                        audience: _configuration["Authentication:ValidAudience"],
+                        expires: DateTime.Now.AddHours(3),
                         signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                     );
 
                     return Ok(new
                     {
-                        token = tokenHandler.WriteToken(stoken),
-                        expiration = token.ValidTo,
-                        userId = user.Id
+                        token = tokenHandler.WriteToken(stoken)
                     });
                 }
                 else
@@ -82,7 +93,7 @@ namespace WMS.UserManagement.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistration userRegistration)
         {
-            var user = await _userManager.FindByNameAsync(userRegistration.Username);
+            var user = await _userManager.FindByNameAsync(userRegistration.Email);
             if (user != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
@@ -94,9 +105,11 @@ namespace WMS.UserManagement.Controllers
             
             User userToRegister = new User
             {
-                Email = userRegistration.Username,
+                Email = userRegistration.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userRegistration.Username                
+                UserName = userRegistration.Email,
+                FirstName = userRegistration.FirstName,
+                LastName = userRegistration.LastName
             };
 
             var result = await _userManager.CreateAsync(userToRegister, userRegistration.Password);
