@@ -11,9 +11,12 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   url: string = 'https://warehousmanagementuserservice.azurewebsites.net/api';
-  isLoggedIn: Boolean = false;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+    if (!this.authCheck) {
+      this.logout();
+    }
+  }
 
   register(user: IUserRegister): void {
     this.http.post<any>(this.url + '/user/register', user).subscribe({
@@ -52,7 +55,7 @@ export class AuthService {
     localStorage.setItem("iat", JSON.stringify(token.iat.valueOf()));
     localStorage.setItem("nbf", JSON.stringify(token.nbf.valueOf()));
     localStorage.setItem('userId', token.userId);
-    localStorage.setItem('username', token.username);
+    localStorage.setItem('email', token.userEmail);
   }
 
   public authCheck(): boolean {
@@ -60,23 +63,16 @@ export class AuthService {
     return moment().isBefore(expirationDate);
   }
 
-  // Temporary:
-  // login(): void {
-  //   this.isLoggedIn = true;
-  //   this.user = {
-  //     user_id: 1,
-  //     warehouse_id: null,
-  //     role_id: null,
-  //     user_first_name: 'Jan',
-  //     user_last_name: 'Nowak',
-  //     user_email: 'jan@nowak.pl',
-  //     user_is_deleted: false
-  //   };
-  // }
-
-  // logout(): void {
-  //   this.isLoggedIn = false;
-  //   this.user = null;
-  // }
+  // Test endpoint
+  public test() {
+    this.http.get<any>(this.url + '/values').subscribe({
+      next: data => {
+          console.log(data);
+      },
+      error: error => {
+          console.error('There was an error!', error);
+      }
+    })
+  }
 
 }

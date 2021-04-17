@@ -14,13 +14,13 @@ export class RegisterComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private auth: AuthService) {
     this.registerForm = this.fb.group({
-      FirstName: ['', [Validators.required] ],
-      LastName: ['', [Validators.required] ],
-      Username: ['', [Validators.required, Validators.email] ],
-      Password: ['', [Validators.required] ],
-      PasswordConfirmation: ['', [Validators.required] ],
-      Agreement: [false, [Validators.requiredTrue] ]
-    }, { validators: (group: FormGroup) => {return group.controls.Password.value === group.controls.PasswordConfirmation.value ? null : {notSame: true}} });
+      firstName: ['', [Validators.required] ],
+      lastName: ['', [Validators.required] ],
+      email: ['', [Validators.required, Validators.email] ],
+      password: ['', [Validators.required] ],
+      passwordConfirmation: ['', [Validators.required] ],
+      agreement: [false, [Validators.requiredTrue] ]
+    }, { validators: (group: FormGroup) => {return group.controls.password.value === group.controls.passwordConfirmation.value ? null : {notSame: true}} });
   }
 
   ngOnInit(): void {
