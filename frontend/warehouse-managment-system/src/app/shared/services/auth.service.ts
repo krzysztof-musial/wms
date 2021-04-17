@@ -55,7 +55,10 @@ export class AuthService {
     localStorage.setItem("iat", JSON.stringify(token.iat.valueOf()));
     localStorage.setItem("nbf", JSON.stringify(token.nbf.valueOf()));
     localStorage.setItem('userId', token.userId);
-    localStorage.setItem('email', token.userEmail);
+    localStorage.setItem('userEmail', token.userEmail);
+    localStorage.setItem('userFirstName', token.userFirstName);
+    localStorage.setItem('userLastName', token.userLastName);
+    localStorage.setItem('warehouseId', token.warehouseId);
   }
 
   public authCheck(): boolean {
