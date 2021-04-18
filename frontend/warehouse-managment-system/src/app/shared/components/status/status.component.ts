@@ -9,14 +9,10 @@ import { AuthService } from '../../services/auth.service';
 export class StatusComponent implements OnInit {
 
   date: string = '04.04.21';
-  username: string = localStorage.getItem("username");
-  // Test endpoint
-  test: any;
 
   constructor(public auth: AuthService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   testEndpoint() {
     this.auth.test();

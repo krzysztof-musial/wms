@@ -7,20 +7,22 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { HasWarehouseGuard } from './shared/guards/has-warehouse.guard';
+import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'app', component: ApplicationComponent, canActivateChild: [AuthGuard], children: [
-    {path: '', component: DashboardComponent},
+    {path: '', component: DashboardComponent, canActivate: [HasWarehouseGuard]},
     //   {path: 'settings', component: },
     //   {path: 'workers', component: },
     //   {path: 'storage', component: },
     //   {path: 'products', component: },
     //   {path: 'actions', component: },
     // Special route for wiring up your account with warehouse
-    {path: 'setup', component: SetupComponent},
+    {path: 'setup', component: SetupComponent, canActivate: [NoWarehouseGuard]},
   ]}
 ];
 

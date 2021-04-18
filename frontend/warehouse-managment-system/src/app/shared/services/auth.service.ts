@@ -21,7 +21,7 @@ export class AuthService {
   register(user: IUserRegister): void {
     this.http.post<any>(this.url + '/user/register', user).subscribe({
       next: data => {
-          console.log(data);
+          // console.log(data);
           this.router.navigate(['/login']);
       },
       error: error => {
@@ -33,8 +33,8 @@ export class AuthService {
   login(user: IUserLogin): void {
     this.http.post<any>(this.url + '/user/login', user).subscribe({
       next: data => {
-          console.log(data);
-          this.setUser(data.token);
+          // console.log(data);
+          localStorage.setItem('token', data.token);
           this.router.navigate(['/app']);
       },
       error: error => {
@@ -48,22 +48,17 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  private setUser(jwt: any) {
-    let token: IToken = jwt_decode(jwt);
-    localStorage.setItem('token', jwt);
-    localStorage.setItem("exp", JSON.stringify(token.exp.valueOf()));
-    localStorage.setItem("iat", JSON.stringify(token.iat.valueOf()));
-    localStorage.setItem("nbf", JSON.stringify(token.nbf.valueOf()));
-    localStorage.setItem('userId', token.userId);
-    localStorage.setItem('userEmail', token.userEmail);
-    localStorage.setItem('userFirstName', token.userFirstName);
-    localStorage.setItem('userLastName', token.userLastName);
-    localStorage.setItem('warehouseId', token.warehouseId);
+  public authCheck(): boolean {
+    if (localStorage.getItem('token')) {
+      return moment().isBefore(this.decodeToken().exp * 1000);
+    } else {
+      return false;
+    }
   }
 
-  public authCheck(): boolean {
-    let expirationDate = JSON.parse(localStorage.getItem("exp")) * 1000;
-    return moment().isBefore(expirationDate);
+  decodeToken() {
+    let token: IToken = jwt_decode(localStorage.getItem('token'));
+    return token;
   }
 
   // Test endpoint

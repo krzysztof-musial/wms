@@ -3,6 +3,6 @@
         <p>Work in progress, v.0.1/{{ date }}</p>
         <button (click)="testEndpoint()">Test GET request</button>
         <p *ngIf="!auth.authCheck()">Not logged in.</p>
-        <p *ngIf="auth.authCheck()">Hello, {{username}} • <span (click)="auth.logout()" style="cursor: pointer;">Logout</span></p>
+        <p *ngIf="auth.authCheck()" (click)="auth.logout()" style="cursor: pointer;">Logout</p>
     </div>
 </section>
