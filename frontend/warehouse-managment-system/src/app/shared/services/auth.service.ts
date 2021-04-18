@@ -69,6 +69,7 @@ export class AuthService {
       },
       error: error => {
           console.error('There was an error!', error);
+          this.logout();
       }
     })
   }

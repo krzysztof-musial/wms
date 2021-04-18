@@ -8,11 +8,11 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { StatusComponent } from './shared/components/status/status.component';
 import { LogoComponent } from './shared/components/logo/logo.component';
 import { ApplicationComponent } from './application/application.component';
 import { SetupComponent } from './application/setup/setup.component';
 import { DashboardComponent } from './application/dashboard/dashboard.component';
+// Other
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { AuthGuard } from './shared/guards/auth.guard';
 
@@ -22,7 +22,6 @@ import { AuthGuard } from './shared/guards/auth.guard';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    StatusComponent,
     LogoComponent,
     ApplicationComponent,
     SetupComponent,
