@@ -8,7 +8,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class StatusComponent implements OnInit {
 
-  date: string = '04.04.21';
+  version: string = 'v.0.1';
+  date: string = '18.04.21';
 
   constructor(public auth: AuthService) { }
 
