@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-status',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatusComponent implements OnInit {
 
-  constructor() { }
+  version: string = 'v.0.1';
+  date: string = '18.04.21';
 
-  ngOnInit(): void {
+  constructor(public auth: AuthService) { }
+
+  ngOnInit(): void {}
+
+  testEndpoint() {
+    this.auth.test();
   }
 
 }

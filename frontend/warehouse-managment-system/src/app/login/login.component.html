@@ -7,13 +7,13 @@
             Login to your account
         </div>
         <div class="card__content">
-            <form class="form">
+            <form class="form" [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
                 <div class="form__content">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Password">
+                    <input type="email" placeholder="Email" formControlName="email">
+                    <input type="password" placeholder="Password" formControlName="password">
                     <a href="#" class="font-size-small font-weight-bold font-color-blue">• Forgot password?</a>
                 </div>
-                <input class="button" type="submit" value="Login" disabled>
+                <input class="button" type="submit" value="Login" [disabled]="!loginForm.valid">
             </form>
         </div>
     </div>

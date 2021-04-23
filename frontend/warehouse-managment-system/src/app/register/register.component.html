@@ -7,21 +7,21 @@
             Create new account
         </div>
         <div class="card__content">
-            <form class="form">
+            <form class="form" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
                 <div class="form__content">
                     <div class="input-grid">
-                        <input type="text" placeholder="First Name">
-                        <input type="text" placeholder="Last Name">
+                        <input type="text" placeholder="First Name" formControlName="firstName">
+                        <input type="text" placeholder="Last Name" formControlName="lastName">
                     </div>
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Password">
-                    <input type="password" placeholder="Confirm password">
+                    <input type="email" placeholder="Email" formControlName="email">
+                    <input type="password" placeholder="Password" formControlName="password">
+                    <input type="password" placeholder="Confirm password" formControlName="passwordConfirmation">
                     <div class="input-flex">
-                        <input type="checkbox" id="agrement" name="agrement">
+                        <input type="checkbox" id="agrement" name="agrement" formControlName="agreement">
                         <label for="agrement" class="font-size-small">I agree to the <span class="font-color-blue">Privacy Policy</span> and <span class="font-color-blue">Terms of Use</span>.</label>
                     </div>
                 </div>
-                <input class="button" type="submit" value="Register" disabled>
+                <input class="button" type="submit" value="Register" [disabled]="!registerForm.valid">
             </form>
         </div>
     </div>

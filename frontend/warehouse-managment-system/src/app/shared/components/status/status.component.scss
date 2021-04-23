@@ -2,7 +2,13 @@
 .status {
     background: $color-dark;
     color: white;
-    padding: .5rem 1rem;
-    text-align: center;
     font-size: .8rem;
+    .content {
+        max-width: $width-big;
+        margin: auto;
+        padding: .5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
