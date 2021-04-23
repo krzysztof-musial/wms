@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
+    [Table("warehouse")]
     public class Warehouse
     {
         [Column("warehouse_id")]

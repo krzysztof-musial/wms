@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
+    [Table("location")]
     public class Location
     {
         [Column("location_id")]

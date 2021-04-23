@@ -129,8 +129,6 @@ C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\bin\De
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.csprojAssemblyReference.cache
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.AssemblyInfoInputs.cache
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.AssemblyInfo.cs
-C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.csproj.CoreCompileInputs.cache
-C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.RazorTargetAssemblyInfo.cache
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.csproj.CopyComplete
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\staticwebassets\WMS.UserManagement.StaticWebAssets.Manifest.cache
@@ -138,3 +136,5 @@ C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\De
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.dll
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.pdb
 C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.genruntimeconfig.cache
+C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.csproj.CoreCompileInputs.cache
+C:\Users\d.kornat\source\repos\niemusialem\wms\backend\WMS.UserManagement\obj\Debug\netcoreapp3.1\WMS.UserManagement.MvcApplicationPartsAssemblyInfo.cache

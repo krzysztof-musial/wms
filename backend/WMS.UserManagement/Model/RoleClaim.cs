@@ -2,7 +2,7 @@
 
 namespace WMS.UserManagement.Model
 {
-    public class Role : IdentityRole<int>
+    public class RoleClaim : IdentityRoleClaim<int>
     {
     }
 }

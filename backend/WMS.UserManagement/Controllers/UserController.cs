@@ -35,7 +35,7 @@ namespace WMS.UserManagement.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
-            var user = await _userManager.FindByNameAsync(userLogin.Username);
+            var user = await _userManager.FindByNameAsync(userLogin.Email);
             if(user != null)
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, userLogin.Password);
@@ -45,7 +45,7 @@ namespace WMS.UserManagement.Controllers
                     SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]));
 
                     IEnumerable<Claim> claims = new Claim[] { };
-                    claims.Append<Claim>(new Claim("userId", user.Id));
+                    claims.Append<Claim>(new Claim("userId", user.Id.ToString()));
 
                     var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
                     int? warehouseId = warehouse?.Id;
@@ -55,7 +55,7 @@ namespace WMS.UserManagement.Controllers
                     {
                         Subject = new ClaimsIdentity(new[]
                             { 
-                            new Claim("userId", user.Id),
+                            new Claim("userId", user.Id.ToString()),
                             new Claim("userEmail", user.Email),
                             new Claim("userFirstName", user.FirstName),
                             new Claim("userLastName", user.LastName),

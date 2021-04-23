@@ -22,17 +22,17 @@ namespace WMS.UserManagement.Controllers
             return new UserLogin[] { 
                 new UserLogin
                 {
-                    Username = "fdsfds",
+                    Email = "fdsfds",
                     Password = "cxz"
                 },
                 new UserLogin
                 {
-                    Username = "fdsgfdghw2321",
+                    Email = "fdsgfdghw2321",
                     Password = "cxzb"
                 },
                 new UserLogin
                 {
-                    Username = "dcxvcx",
+                    Email = "dcxvcx",
                     Password = "3f1"
                 }
             };
