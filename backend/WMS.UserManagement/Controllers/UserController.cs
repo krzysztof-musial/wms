@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using WMS.UserManagement.Model;
 using WMS.UserManagement.DTO;
 using Microsoft.EntityFrameworkCore;
+using WMS.UserManagement.Model.Authentication;
+using WMS.UserManagement.Model.Common;
+using WMS.UserManagement.Model.Common.FailedResponses;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -33,19 +35,18 @@ namespace WMS.UserManagement.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromBody] Login userLogin)
         {
             var user = await _userManager.FindByNameAsync(userLogin.Email);
             if(user != null)
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, userLogin.Password);
                 if(passwordCheck)
-                {
-                    
+                {                    
                     SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]));
 
                     IEnumerable<Claim> claims = new Claim[] { };
-                    claims.Append<Claim>(new Claim("userId", user.Id.ToString()));
+                    claims.Append(new Claim("userId", user.Id.ToString()));
 
                     var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
                     int? warehouseId = warehouse?.Id;
@@ -72,35 +73,35 @@ namespace WMS.UserManagement.Controllers
                         expires: DateTime.Now.AddHours(3),
                         signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
                     );
-
-                    return Ok(new
+                    LoginResult loginResult = new LoginResult
                     {
-                        token = tokenHandler.WriteToken(stoken)
-                    });
+                        Token = tokenHandler.WriteToken(stoken)
+                    };
+                    SuccessResponse<LoginResult> response = new SuccessResponse<LoginResult>(loginResult);
+                    return Ok(response);
                 }
                 else
                 {
-                    return Unauthorized("Wrong password");
+                    FailedResponse response = UserResponse.GetWrongAuthDataResponse();
+                    return Unauthorized(response);
                 }                
             }
             else
             {
-                return Unauthorized("User not found");
+                FailedResponse response = UserResponse.GetWrongAuthDataResponse();
+                return Unauthorized(response);
             }
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegistration userRegistration)
-        {
+        public async Task<IActionResult> Register([FromBody] Registration userRegistration)
+        {            
             var user = await _userManager.FindByNameAsync(userRegistration.Email);
             if (user != null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response
-                {
-                    Status = "Error",
-                    Message = "User is already registered"
-                });
+                FailedResponse response = UserResponse.GetUserIsAlreadyRegisteredResponse();
+                return BadRequest(response);
             }
             
             User userToRegister = new User
@@ -114,9 +115,41 @@ namespace WMS.UserManagement.Controllers
 
             var result = await _userManager.CreateAsync(userToRegister, userRegistration.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = result.Errors.FirstOrDefault().Description });
+            {
+                string message = result.Errors.FirstOrDefault() != null ? result.Errors.FirstOrDefault().Description : "Uknown error";
+                FailedResponse response = new FailedResponse(message);
+                return BadRequest(response);
+            }
 
-            return Ok(new Response { Status = "Success", Message = "User created" });
+            SuccessResponse<IdentityResult> successResponse = new SuccessResponse<IdentityResult>(result);
+            return Ok(successResponse);
+        }
+
+        [HttpPost]
+        [Route("resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPasswordUser)
+        {
+            if (resetPasswordUser?.Email == null)
+            {
+                FailedResponse response = UserResponse.GetPropertyCannotBeNullResponse("Email");
+                return BadRequest(response);
+            }
+
+            var user = await _userManager.FindByNameAsync(resetPasswordUser.Email);
+            if(user == null)
+            {
+                FailedResponse response = UserResponse.GetUserNotFoundErrorResponse();
+                return BadRequest(response);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            ResetPasswordResult resetPasswordResult = new ResetPasswordResult
+            {
+                Token = token
+            };
+
+            SuccessResponse<ResetPasswordResult> successResponse = new SuccessResponse<ResetPasswordResult>(resetPasswordResult);
+            return Ok(successResponse);
         }
     }
 }
