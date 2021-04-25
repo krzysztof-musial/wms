@@ -14,16 +14,22 @@ const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'app', component: ApplicationComponent, canActivateChild: [AuthGuard], children: [
-    {path: '', component: DashboardComponent, canActivate: [HasWarehouseGuard]},
-    //   {path: 'settings', component: },
-    //   {path: 'workers', component: },
-    //   {path: 'storage', component: },
-    //   {path: 'products', component: },
-    //   {path: 'actions', component: },
-    // Special route for wiring up your account with warehouse
-    {path: 'setup', component: SetupComponent, canActivate: [NoWarehouseGuard]},
+  // {path: 'app', component: ApplicationComponent, canActivateChild: [AuthGuard], children: [
+  //   {path: '', component: DashboardComponent, canActivate: [HasWarehouseGuard]},
+  //   //   {path: 'settings', component: },
+  //   //   {path: 'workers', component: },
+  //   //   {path: 'storage', component: },
+  //   //   {path: 'products', component: },
+  //   //   {path: 'actions', component: },
+  //   // Special route for wiring up your account with warehouse
+  //   {path: 'setup', component: SetupComponent, canActivate: [NoWarehouseGuard]},
+  // ]}
+  // TEST, NO AUTH NEEDED
+  {path: 'app', component: ApplicationComponent, children: [
+    {path: '', component: DashboardComponent},
+    {path: 'setup', component: SetupComponent},
   ]}
+  // TEST, NO AUTH NEEDED
 ];
 
 @NgModule({

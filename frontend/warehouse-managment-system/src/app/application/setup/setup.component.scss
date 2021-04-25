@@ -1,0 +1,16 @@
+@use '../../../assets/styles/' as *;
+main {
+    width: 100%;
+    min-height: 100vh;
+    background: $app-bg;
+}
+nav {
+    padding: $spacing;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .logout {
+        text-transform: uppercase;
+        color: $app-txt-secondary;
+    }
+}
