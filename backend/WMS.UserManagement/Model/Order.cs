@@ -11,7 +11,7 @@ namespace WMS.UserManagement.Model
         public int Id { get; set; }
         [Column("company_id")]
         [Required]
-        public Company CompanyId { get; set; }
+        public Company Company { get; set; }
         [Column("order_name")]
         public string Name { get; set; }
         [Column("order_created_on")]

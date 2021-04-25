@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WMS.UserManagement.Model;
+using WMS.UserManagement.Model.Authentication;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,23 +16,24 @@ namespace WMS.UserManagement.Controllers
     public class ValuesController : ControllerBase
     {
         // GET: api/<ValuesController>
+        [Authorize]
         [HttpGet]
-        public IEnumerable<UserLogin> Get()
+        public IEnumerable<Login> Get()
         {
-            return new UserLogin[] { 
-                new UserLogin
+            return new Login[] { 
+                new Login
                 {
-                    Username = "fdsfds",
+                    Email = "fdsfds",
                     Password = "cxz"
                 },
-                new UserLogin
+                new Login
                 {
-                    Username = "fdsgfdghw2321",
+                    Email = "fdsgfdghw2321",
                     Password = "cxzb"
                 },
-                new UserLogin
+                new Login
                 {
-                    Username = "dcxvcx",
+                    Email = "dcxvcx",
                     Password = "3f1"
                 }
             };

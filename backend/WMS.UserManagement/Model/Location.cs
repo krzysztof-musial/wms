@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace WMS.UserManagement.Model
 {
+    [Table("location")]
     public class Location
     {
         [Column("location_id")]
         public int Id { get; set; }
         [Column("warehouse_id")]
         [Required]
-        public Warehouse WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
         [Column("location_code")]
         [Required]
         public string Code { get; set; }
