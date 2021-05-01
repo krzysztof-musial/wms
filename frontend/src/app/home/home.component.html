@@ -1,0 +1,11 @@
+<main class="">
+    <nav class="border-b border-gray-200">
+        <div class="max-w-screen-lg mx-auto p-4 flex justify-between items-center">
+            <app-logo [logo]="'big'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo>
+            <div class="flex space-x-4">
+                <button [routerLink]="['/login']" class="rounded px-4 py-2 text-blue-600 font-medium">Login</button>
+                <button [routerLink]="['/register']" class="border border-gray-200 rounded px-4 py-1 text-blue-600 font-medium hover:bg-blue-600 hover:text-white">Register</button>
+            </div>
+        </div>
+    </nav>
+</main>
