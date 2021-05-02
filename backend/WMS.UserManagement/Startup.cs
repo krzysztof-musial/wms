@@ -1,23 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.DTO;
-using WMS.UserManagement.Model;
+using WMS.UserManagement.Model.Db;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
+using WMS.UserManagement.Model.Notifications;
 
 namespace WMS.UserManagement
 {
@@ -33,7 +26,9 @@ namespace WMS.UserManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddDbContext<WarehouseManagementSystemDataContext>(o => o.UseSqlServer(Configuration.GetConnectionString("WarehouseManagementSystemDB")));
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WarehouseManagementSystemDataContext>()
@@ -60,6 +55,17 @@ namespace WMS.UserManagement
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:Secret"]))
                 };
             });
+            
+            var emailConf = new EmailConfiguration
+            {
+                Host = Configuration["EmailConfiguration:Host"],
+                Username = Configuration["EmailConfiguration:Username"],
+                Password = Configuration["EmailConfiguration:Password"],
+                Port = Configuration.GetValue<int>("EmailConfiguration:SmtpPort")
+            };
+
+            services.AddScoped<IEmailConfiguration, EmailConfiguration>();
+            services.AddSingleton(emailConf);
         }
 
 

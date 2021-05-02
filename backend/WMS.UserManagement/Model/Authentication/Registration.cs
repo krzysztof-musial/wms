@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using WMS.UserManagement.Utils;
 
 namespace WMS.UserManagement.Model.Authentication
 {
@@ -20,9 +21,9 @@ namespace WMS.UserManagement.Model.Authentication
         [Required]
         public string PasswordConfirmation { get; set; }
 
-        public bool IsPasswordsSame()
+        public bool WhetherPasswordsAreSame()
         {
-            return Password == PasswordConfirmation;
+            return Text.WhetherTextsAreSame(Password, PasswordConfirmation);
         }
     }
 }

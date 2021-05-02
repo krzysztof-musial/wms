@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.DTO;
-using WMS.UserManagement.Model;
+using WMS.UserManagement.Model.Db;
+using WMS.UserManagement.Model.Common.Response;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -16,25 +17,32 @@ namespace WMS.UserManagement.Controllers
     [Authorize]
     public class WarehousesController : ControllerBase
     {
-        private readonly WarehouseManagementSystemDataContext _context;
+        private readonly WarehouseManagementSystemDataContext _dbContext;
 
         public WarehousesController(WarehouseManagementSystemDataContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
 
         // GET: api/Warehouses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehouses()
         {
-            return await _context.Warehouses.ToListAsync();
+            return await _dbContext.Warehouses.ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("GetWarehouseMembers/{id}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetWarehouseMembers(int id)
+        {
+            return await _dbContext.Users.Where(x => x.WarehouseId == id).ToListAsync();
         }
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Warehouse>> GetWarehouse(int id)
         {
-            var warehouse = await _context.Warehouses.FindAsync(id);
+            var warehouse = await _dbContext.Warehouses.FindAsync(id);
 
             if (warehouse == null)
             {
@@ -55,11 +63,11 @@ namespace WMS.UserManagement.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(warehouse).State = EntityState.Modified;
+            _dbContext.Entry(warehouse).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,33 +88,39 @@ namespace WMS.UserManagement.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Warehouse>> PostWarehouse(Warehouse warehouse)
+        public async Task<ActionResult<SuccessResponse<Warehouse>>> PostWarehouse(Warehouse warehouse)
         {
-            _context.Warehouses.Add(warehouse);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);
-        }
-
-        // DELETE: api/Warehouses/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Warehouse>> DeleteWarehouse(int id)
-        {
-            var warehouse = await _context.Warehouses.FindAsync(id);
-            if (warehouse == null)
+            string id = User.Claims.Where(x => x.Type == "userId").FirstOrDefault()?.Value;
+            int userId = int.Parse(id);
+            User user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
+            var userHasCreatedWarehouse = _dbContext.Warehouses.Any(x => x.UserId == userId);
+            if (userHasCreatedWarehouse)
             {
-                return NotFound();
+                FailedResponse response = WarehouseResponse.GetUserAlreadyCreatedWarehouseResponse();
+                return BadRequest(response);
             }
 
-            _context.Warehouses.Remove(warehouse);
-            await _context.SaveChangesAsync();
+            var warehouseAlreadyExists = _dbContext.Warehouses.Any(x => x.Name == warehouse.Name);
+            if (warehouseAlreadyExists)
+            {
+                FailedResponse response = WarehouseResponse.GetWarehouseAlreadyExistsResponse();
+                return BadRequest(response);
+            }
+            warehouse.UserId = userId;
+            var addedWarehouse = _dbContext.Warehouses.Add(warehouse);
+            await _dbContext.SaveChangesAsync();
 
-            return warehouse;
+            user.WarehouseId = addedWarehouse.Entity.Id;
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            SuccessResponse<Warehouse> successResponse = new SuccessResponse<Warehouse>(warehouse);
+            return Ok(successResponse);
         }
 
         private bool WarehouseExists(int id)
         {
-            return _context.Warehouses.Any(e => e.Id == id);
+            return _dbContext.Warehouses.Any(e => e.Id == id);
         }
     }
 }

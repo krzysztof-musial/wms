@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WMS.UserManagement.Model;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using WMS.UserManagement.Model.Db;
 
 namespace WMS.UserManagement.DTO
 {
@@ -23,6 +25,19 @@ namespace WMS.UserManagement.DTO
             builder.Entity<IdentityUserClaim<int>>().ToTable("userclaim");
             builder.Entity<IdentityUserLogin<int>>().ToTable("userlogin");
             builder.Entity<IdentityUserToken<int>>().ToTable("usertoken");
+            //builder.ApplyConfiguration(new UserConfiguration());
+            builder.Entity<User>()
+                .HasOne(x => x.Warehouse)
+                .WithMany();
+            builder.Entity<User>()
+                .HasIndex(x => x.WarehouseId);
+
+            builder.Entity<Warehouse>()
+                .HasOne(x => x.CreatedBy)
+                .WithMany();
+            builder.Entity<Warehouse>()
+                .HasIndex(x => x.UserId)
+                .IsUnique();
         }
 
         public DbSet<Warehouse> Warehouses { get; set; }

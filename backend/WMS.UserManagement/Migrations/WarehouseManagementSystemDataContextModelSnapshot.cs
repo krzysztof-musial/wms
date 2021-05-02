@@ -384,8 +384,7 @@ namespace WMS.UserManagement.Migrations
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("email");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -442,7 +441,9 @@ namespace WMS.UserManagement.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("WarehouseId");
+                    b.HasIndex("WarehouseId")
+                        .IsUnique()
+                        .HasFilter("[WarehouseId] IS NOT NULL");
 
                     b.ToTable("user");
                 });
@@ -460,7 +461,14 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("warehouse_name");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("warehouse_user_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("warehouse");
                 });
@@ -592,6 +600,17 @@ namespace WMS.UserManagement.Migrations
                         .HasForeignKey("WarehouseId");
 
                     b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Warehouse", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
                 });
 #pragma warning restore 612, 618
         }

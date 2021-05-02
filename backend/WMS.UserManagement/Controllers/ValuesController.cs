@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WMS.UserManagement.Model;
+using Microsoft.Extensions.Configuration;
+using WMS.UserManagement.DTO;
+using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.Model.Authentication;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,6 +15,17 @@ namespace WMS.UserManagement.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
+        private readonly WarehouseManagementSystemDataContext _dbContext;
+
+        public ValuesController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext)
+        {
+            _configuration = configuration;
+            _userManager = userManager;
+            _dbContext = dbContext;
+        }
+
         // GET: api/<ValuesController>
         [Authorize]
         [HttpGet]

@@ -2,5 +2,6 @@
 {
     public class RegistrationResult
     {
+        public int UserId { get; set; }
     }
 }

@@ -9,12 +9,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using WMS.UserManagement.Model;
+using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.DTO;
 using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.Model.Authentication;
-using WMS.UserManagement.Model.Common;
-using WMS.UserManagement.Model.Common.FailedResponses;
+using WMS.UserManagement.Utils;
+using WMS.UserManagement.Model.Notifications;
+using WMS.UserManagement.Model.Common.Response;
+using WMS.UserManagement.Model.Warehouse;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -25,12 +28,14 @@ namespace WMS.UserManagement.Controllers
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
         private readonly WarehouseManagementSystemDataContext _dbContext;
+        private readonly IEmailConfiguration _emailConfiguration;
 
-        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext)
+        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext, IEmailConfiguration emailConfiguration)
         {
             _configuration = configuration;
             _userManager = userManager;
             _dbContext = dbContext;
+            _emailConfiguration = emailConfiguration;
         }
 
         [HttpPost]
@@ -51,20 +56,8 @@ namespace WMS.UserManagement.Controllers
                     var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
                     int? warehouseId = warehouse?.Id;
 
+                    SecurityTokenDescriptor tokenDescriptor = TokenDescriptor.GetTokenDescriptor(user, warehouse, symmetricSecurityKey);
 
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new[]
-                            { 
-                            new Claim("userId", user.Id.ToString()),
-                            new Claim("userEmail", user.Email),
-                            new Claim("userFirstName", user.FirstName),
-                            new Claim("userLastName", user.LastName),
-                            new Claim("warehouseId", warehouseId.ToString())
-                            }
-                        ),
-                        SigningCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
-                    };
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var stoken = tokenHandler.CreateToken(tokenDescriptor);
                     var token = new JwtSecurityToken(
@@ -96,7 +89,14 @@ namespace WMS.UserManagement.Controllers
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] Registration userRegistration)
-        {            
+        {
+            bool passwordVerification = userRegistration.WhetherPasswordsAreSame();
+            if(!passwordVerification)
+            {
+                FailedResponse response = UserResponse.GetNotSamePasswordsResponse();
+                return BadRequest(response);
+            }
+
             var user = await _userManager.FindByNameAsync(userRegistration.Email);
             if (user != null)
             {
@@ -120,8 +120,8 @@ namespace WMS.UserManagement.Controllers
                 FailedResponse response = new FailedResponse(message);
                 return BadRequest(response);
             }
-
-            SuccessResponse<IdentityResult> successResponse = new SuccessResponse<IdentityResult>(result);
+            var userId = _userManager.FindByEmailAsync(userRegistration.Email).Result.Id;
+            var successResponse = UserResponse.GetCreatedUserResponse(userId);
             return Ok(successResponse);
         }
 
@@ -149,6 +149,28 @@ namespace WMS.UserManagement.Controllers
             };
 
             SuccessResponse<ResetPasswordResult> successResponse = new SuccessResponse<ResetPasswordResult>(resetPasswordResult);
+            return Ok(successResponse);
+        }
+
+        [HttpPost]
+        [Route("assigntowarehouse")]
+        [Authorize]
+        public async Task<ActionResult<SuccessResponse<AssignUserToWarehouse>>> AssignUser([FromBody]AssignUserToWarehouse assignUserToWarehouse)
+        {
+            User user = await _userManager.FindByIdAsync(assignUserToWarehouse.UserId.ToString());
+            string initiatingUserIdAsText = User.Claims.FirstOrDefault(x => x.Type == "userId").Value;
+            int initiatingUserId = int.Parse(initiatingUserIdAsText);
+            Warehouse warehouse = _dbContext.Warehouses.FirstOrDefault(x => x.UserId == initiatingUserId);
+            user.WarehouseId = warehouse.Id;
+            var operationResponse = _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            AssignUserToWarehouseResult assignUserToWarehouseResult = new AssignUserToWarehouseResult
+            {
+                UserId = assignUserToWarehouse.UserId,
+                WarehouseId = warehouse.UserId
+
+            };
+            SuccessResponse<AssignUserToWarehouseResult> successResponse = new SuccessResponse<AssignUserToWarehouseResult>(assignUserToWarehouseResult);
             return Ok(successResponse);
         }
     }
