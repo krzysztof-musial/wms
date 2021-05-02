@@ -1,0 +1,20 @@
+<main class="min-h-screen p-4 flex justify-center items-center">
+    <div class="p-4 flex flex-col items-center w-full max-w-md sm:border sm:border-gray-200 sm:p-12 sm:rounded-lg sm:shadow-xl">
+        <app-logo [logo]="'big'" [colorIcon]="'rgb(3, 102, 214)'" [colorText]="'rgb(24, 24, 26)'" [routerLink]="['/']"></app-logo>
+        <h1 class="my-8 text-xl font-semibold">Create new account</h1>
+        <form class="flex flex-col items-center space-y-4 w-full" [formGroup]="registerForm" (ngSubmit)="register(registerForm.value)">
+            <div class="flex flex-col space-y-4 w-full sm:flex-row sm:space-x-4 sm:space-y-0">
+                <input type="text" class="wms-input" placeholder="First Name" formControlName="firstName">
+                <input type="text" class="wms-input" placeholder="Last Name" formControlName="lastName">
+            </div>
+            <input type="email" class="wms-input" placeholder="Email" formControlName="email">
+            <input type="password" class="wms-input" placeholder="Password" formControlName="password">
+            <input type="password" class="wms-input" placeholder="Confirm password" formControlName="passwordConfirmation">
+            <div class="flex space-x-2 items-center self-start">
+                <input type="checkbox" class="rounded border-gray-300" name="" id="" formControlName="agreement">
+                <div class="text-sm">I agree to the <a href="" class="text-blue-600 font-medium">Privacy Policy</a> and <a href="" class="text-blue-600 font-medium">Terms of Use</a>.</div>
+            </div>
+            <input type="submit" class="wms-submit w-full" value="Register" [disabled]="!registerForm.valid">
+        </form>
+    </div>
+</main>
