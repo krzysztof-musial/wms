@@ -160,6 +160,13 @@ namespace WMS.UserManagement.Controllers
             User user = await _userManager.FindByIdAsync(assignUserToWarehouse.UserId.ToString());
             string initiatingUserIdAsText = User.Claims.FirstOrDefault(x => x.Type == "userId").Value;
             int initiatingUserId = int.Parse(initiatingUserIdAsText);
+
+            bool isUserIsOwnerOfWarehouse = _dbContext.Warehouses.Any(x => x.UserId == assignUserToWarehouse.UserId);
+            if(isUserIsOwnerOfWarehouse)
+            {
+                var response = WarehouseResponse.GetUserIsAlreadyOwnerOfAnotherWarehouse();
+                return BadRequest(response);
+            }
             Warehouse warehouse = _dbContext.Warehouses.FirstOrDefault(x => x.UserId == initiatingUserId);
             user.WarehouseId = warehouse.Id;
             var operationResponse = _dbContext.Users.Update(user);
