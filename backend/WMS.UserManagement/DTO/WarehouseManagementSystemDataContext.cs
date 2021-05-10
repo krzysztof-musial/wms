@@ -49,5 +49,6 @@ namespace WMS.UserManagement.DTO
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<UnitOfMessure> UnitOfMessures { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
     }
 }

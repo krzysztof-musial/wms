@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS.UserManagement.DTO;
 
 namespace WMS.UserManagement.Migrations
 {
     [DbContext(typeof(WarehouseManagementSystemDataContext))]
-    partial class WarehouseManagementSystemDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210504074056_AddedInvitationTable")]
+    partial class AddedInvitationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,13 +198,11 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("int")
                         .HasColumnName("invitation_state");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("invitation_user_id");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("int")
-                        .HasColumnName("invitation_warehouse_id");
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -570,15 +570,11 @@ namespace WMS.UserManagement.Migrations
                 {
                     b.HasOne("WMS.UserManagement.Model.Db.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
                         .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WarehouseId");
 
                     b.Navigation("User");
 

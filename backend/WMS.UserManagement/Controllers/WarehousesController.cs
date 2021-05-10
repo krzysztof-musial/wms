@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.Model.Common.Response;
+using WMS.UserManagement.Utils;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -90,8 +91,7 @@ namespace WMS.UserManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<SuccessResponse<Warehouse>>> PostWarehouse(Warehouse warehouse)
         {
-            string id = User.Claims.Where(x => x.Type == "userId").FirstOrDefault()?.Value;
-            int userId = int.Parse(id);
+            int userId = UserClaims.GetUserIdFromClaims(User);
             User user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
             var userHasCreatedWarehouse = _dbContext.Warehouses.Any(x => x.UserId == userId);
             if (userHasCreatedWarehouse)
