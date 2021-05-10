@@ -25,7 +25,7 @@ namespace WMS.UserManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SuccessResponse<bool>>> AddInvitation([FromBody] Invitation invitation)
+        public async Task<ActionResult> AddInvitation([FromBody] Invitation invitation)
         {
             int userId = UserClaims.GetUserIdFromClaims(User);
             invitation.UserId = userId;
