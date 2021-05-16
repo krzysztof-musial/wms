@@ -13,8 +13,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private auth: AuthService) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email] ],
-      password: ['', [Validators.required] ],
+      // Temporary values for easy loging
+      email: ['jan@kowalski.com', [Validators.required, Validators.email] ],
+      password: ['Password123$', [Validators.required] ],
     });
   }
 
@@ -22,9 +23,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(form: any): void {
-    console.log(form);
     this.auth.login(form);
-    this.loginForm.reset();
   }
 
 }

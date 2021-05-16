@@ -21,7 +21,6 @@ export class AuthService {
   register(user: any): void {
     this.http.post<any>(this.url + '/user/register', user).subscribe({
       next: data => {
-          // console.log(data);
           this.router.navigate(['/login']);
       },
       error: error => {
@@ -33,7 +32,6 @@ export class AuthService {
   login(user: any): void {
     this.http.post<any>(this.url + '/user/login', user).subscribe({
       next: data => {
-          console.log(data);
           localStorage.setItem('token', data.data.token);
           this.router.navigate(['/app']);
       },
