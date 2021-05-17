@@ -24,6 +24,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { HasWarehouseGuard } from './shared/guards/has-warehouse.guard';
 import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
+import { HttpRequestInterceptor } from './shared/interceptors/http-request.interceptor';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true},
     AuthGuard,
     NoAuthGuard,
     HasWarehouseGuard,
