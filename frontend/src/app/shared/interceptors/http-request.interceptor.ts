@@ -26,16 +26,16 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     this._loading.setLoading(true, request.url);
     return next.handle(request)
       .pipe(catchError((err) => {
-        setTimeout(() => {
+        // setTimeout(() => {
           this._loading.setLoading(false, request.url);
-        }, 500);
+        // }, 500);
         return err;
       }))
       .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
         if (evt instanceof HttpResponse) {
-          setTimeout(() => {
+          // setTimeout(() => {
             this._loading.setLoading(false, request.url);
-          }, 500);
+          // }, 500);
         }
         return evt;
       }));

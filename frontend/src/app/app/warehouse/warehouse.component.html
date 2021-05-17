@@ -90,7 +90,7 @@
         </div>
     </div>
     <!-- Menu mobile -->
-    <div *ngIf="menuMobile" class="absolute top-0 left-0 p-4 bg-wms-500 flex flex-col justify-between h-screen border-r border-wms-400 md:hidden">
+    <div *ngIf="menuMobile" @slideInOut class="absolute top-0 left-0 p-4 bg-wms-500 flex flex-col justify-between h-screen border-r border-wms-400 md:hidden">
         <div>
             <div class="p-4 pr-0 flex items-center space-x-4 justify-between">
                 <app-logo class="cursor-pointer" [logo]="'big'" [colorIcon]="'#5CFFFF'" [colorText]="'white'" [routerLink]="['/']"></app-logo>
