@@ -1,4 +1,4 @@
-<main class="w-full min-h-screen bg-wms-500 relative md:flex">
+<main class="min-h-screen bg-wms-500 relative flex">
     <!-- Menu expanded -->
     <div *ngIf="!menuShrinked" class="hidden md:flex md:flex-col md:justify-between md:h-screen md:p-4 md:border-r md:border-wms-400">
         <div>
@@ -75,9 +75,9 @@
         </div>
     </div>
     <!-- Main -->
-    <div>
+    <div class="w-full overflow-y-auto max-h-screen">
         <!-- Title -->
-        <div class="p-8 flex items-center">
+        <div class="p-8 flex items-center sticky top-0 bg-wms-500">
             <!-- Burger mobile -->
             <app-icon class="md:hidden cursor-pointer" [icon]="'burger'" [colorPrimary]="'white'" (click)="triggerMenuMobile()"></app-icon>
             <!-- Burger desktop -->
