@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WMS.UserManagement.Model.Notifications;
+using WMS.UserManagement.Model.Services;
 
 namespace WMS.UserManagement
 {
@@ -65,6 +66,7 @@ namespace WMS.UserManagement
             };
 
             services.AddScoped<IEmailConfiguration, EmailConfiguration>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSingleton(emailConf);
         }
 

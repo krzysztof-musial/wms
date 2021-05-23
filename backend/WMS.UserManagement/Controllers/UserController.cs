@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.DTO;
-using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.Model.Authentication;
-using WMS.UserManagement.Utils;
 using WMS.UserManagement.Model.Notifications;
 using WMS.UserManagement.Model.Common.Response;
 using WMS.UserManagement.Model.Warehouse;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
+using WMS.UserManagement.Model.Services;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -29,156 +23,94 @@ namespace WMS.UserManagement.Controllers
         private readonly UserManager<User> _userManager;
         private readonly WarehouseManagementSystemDataContext _dbContext;
         private readonly IEmailConfiguration _emailConfiguration;
+        private IUserService _userService;
 
-        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext, IEmailConfiguration emailConfiguration)
+        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext, IEmailConfiguration emailConfiguration, IUserService userService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _dbContext = dbContext;
             _emailConfiguration = emailConfiguration;
+            _userService = userService;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] Login userLogin)
         {
-            var user = await _userManager.FindByNameAsync(userLogin.Email);
-            if(user != null)
-            {
-                var passwordCheck = await _userManager.CheckPasswordAsync(user, userLogin.Password);
-                if(passwordCheck)
-                {                    
-                    SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]));
+            string ipAddress = GetIpAddress();
+            var response = await _userService.Login(userLogin, ipAddress);
+            if (response.Success)
+                return Ok(response);
 
-                    IEnumerable<Claim> claims = new Claim[] { };
-                    claims.Append(new Claim("userId", user.Id.ToString()));
-
-                    var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
-                    int? warehouseId = warehouse?.Id;
-
-                    SecurityTokenDescriptor tokenDescriptor = TokenDescriptor.GetTokenDescriptor(user, warehouse, symmetricSecurityKey);
-
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var stoken = tokenHandler.CreateToken(tokenDescriptor);
-                    var token = new JwtSecurityToken(
-                        issuer: _configuration["Authentication:ValidIssuer"],
-                        audience: _configuration["Authentication:ValidAudience"],
-                        expires: DateTime.Now.AddHours(3),
-                        signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
-                    );
-                    LoginResult loginResult = new LoginResult
-                    {
-                        Token = tokenHandler.WriteToken(stoken)
-                    };
-                    SuccessResponse<LoginResult> response = new SuccessResponse<LoginResult>(loginResult);
-                    return Ok(response);
-                }
-                else
-                {
-                    FailedResponse response = UserResponse.GetWrongAuthDataResponse();
-                    return Unauthorized(response);
-                }                
-            }
-            else
-            {
-                FailedResponse response = UserResponse.GetWrongAuthDataResponse();
-                return Unauthorized(response);
-            }
+            return BadRequest(response);
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] Registration userRegistration)
         {
-            bool passwordVerification = userRegistration.WhetherPasswordsAreSame();
-            if(!passwordVerification)
-            {
-                FailedResponse response = UserResponse.GetNotSamePasswordsResponse();
-                return BadRequest(response);
-            }
+            var response = await _userService.Register(userRegistration);
+            if (response.Success)
+                return Ok(response);
 
-            var user = await _userManager.FindByNameAsync(userRegistration.Email);
-            if (user != null)
-            {
-                FailedResponse response = UserResponse.GetUserIsAlreadyRegisteredResponse();
-                return BadRequest(response);
-            }
-            
-            User userToRegister = new User
-            {
-                Email = userRegistration.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userRegistration.Email,
-                FirstName = userRegistration.FirstName,
-                LastName = userRegistration.LastName
-            };
-
-            var result = await _userManager.CreateAsync(userToRegister, userRegistration.Password);
-            if (!result.Succeeded)
-            {
-                string message = result.Errors.FirstOrDefault() != null ? result.Errors.FirstOrDefault().Description : "Uknown error";
-                FailedResponse response = new FailedResponse(message);
-                return BadRequest(response);
-            }
-            var userId = _userManager.FindByEmailAsync(userRegistration.Email).Result.Id;
-            var successResponse = UserResponse.GetCreatedUserResponse(userId);
-            return Ok(successResponse);
+            return BadRequest(response);
         }
 
         [HttpPost]
-        [Route("resetpassword")]
+        [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPasswordUser)
         {
-            if (resetPasswordUser?.Email == null)
-            {
-                FailedResponse response = UserResponse.GetPropertyCannotBeNullResponse("Email");
-                return BadRequest(response);
-            }
-
-            var user = await _userManager.FindByNameAsync(resetPasswordUser.Email);
-            if(user == null)
-            {
-                FailedResponse response = UserResponse.GetUserNotFoundErrorResponse();
-                return BadRequest(response);
-            }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            ResetPasswordResult resetPasswordResult = new ResetPasswordResult
-            {
-                Token = token
-            };
-
-            SuccessResponse<ResetPasswordResult> successResponse = new SuccessResponse<ResetPasswordResult>(resetPasswordResult);
-            return Ok(successResponse);
+            var response = await _userService.ResetPassword(resetPasswordUser);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         [HttpPost]
-        [Route("assigntowarehouse")]
+        [Route("AssignToWarehouse")]
         [Authorize]
         public async Task<ActionResult<SuccessResponse<AssignUserToWarehouse>>> AssignUser([FromBody]AssignUserToWarehouse assignUserToWarehouse)
         {
-            User user = await _userManager.FindByIdAsync(assignUserToWarehouse.UserId.ToString());
-            string initiatingUserIdAsText = User.Claims.FirstOrDefault(x => x.Type == "userId").Value;
-            int initiatingUserId = int.Parse(initiatingUserIdAsText);
+            var response = await _userService.AssignUserToWarehouse(assignUserToWarehouse, User);
 
-            bool isUserIsOwnerOfWarehouse = _dbContext.Warehouses.Any(x => x.UserId == assignUserToWarehouse.UserId);
-            if(isUserIsOwnerOfWarehouse)
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("RefreshToken")]
+        public IActionResult RefreshToken([FromBody] RefreshToken refreshToken)
+        {
+
+            // TO DO add handling access token
+            var response = await _userService.RefreshToken(refreshToken, "");
+
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        private string GetIpAddress()
+        {
+            if(Request.Headers.ContainsKey("X-Forwarder-For"))
             {
-                var response = WarehouseResponse.GetUserIsAlreadyOwnerOfAnotherWarehouse();
-                return BadRequest(response);
+                return Request.Headers["X-Forwarder-For"];
             }
-            Warehouse warehouse = _dbContext.Warehouses.FirstOrDefault(x => x.UserId == initiatingUserId);
-            user.WarehouseId = warehouse.Id;
-            var operationResponse = _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-            AssignUserToWarehouseResult assignUserToWarehouseResult = new AssignUserToWarehouseResult
+            else
             {
-                UserId = assignUserToWarehouse.UserId,
-                WarehouseId = warehouse.UserId
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            }
+        }
 
-            };
-            SuccessResponse<AssignUserToWarehouseResult> successResponse = new SuccessResponse<AssignUserToWarehouseResult>(assignUserToWarehouseResult);
-            return Ok(successResponse);
+        [Authorize]
+        [HttpPost("RevokeToken")]
+        public bool RevokeToken(string token, string ipAddress)
+        {
+            throw new NotImplementedException();
         }
     }
 }

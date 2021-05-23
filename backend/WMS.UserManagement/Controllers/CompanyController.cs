@@ -27,9 +27,11 @@ namespace WMS.UserManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetWarehouseCompanies()
+        public async Task<ActionResult> GetWarehouseCompanies()
         {
-            return await _dbContext.Companies.ToListAsync();
+            var companies = await _dbContext.Companies.ToListAsync();
+            SuccessResponse<List<Company>> successResponse = new SuccessResponse<List<Company>>(companies);
+            return Ok(successResponse);
         }
 
         [HttpGet("{id}")]
@@ -41,13 +43,19 @@ namespace WMS.UserManagement.Controllers
             {
                 return NotFound();
             }
-
-            return company;
+            SuccessResponse<Company> successResponse = new SuccessResponse<Company>(company);
+            return Ok(successResponse);
         }
 
         [HttpPost]
         public async Task<ActionResult> AddCompany([FromBody] Company company)
         {
+            bool companyAlreadyExists = _dbContext.Companies.Any(x => x.Tin == company.Tin);
+            if(companyAlreadyExists)
+            {
+                FailedResponse failedResponse = CompanyResponse.GetCompanyWithProvidedTinAlreadyExistsResponse();
+                return BadRequest(failedResponse);
+            }
             _dbContext.Companies.Add(company);
             await _dbContext.SaveChangesAsync();
             SuccessResponse<Company> successResponse = new SuccessResponse<Company>(company);

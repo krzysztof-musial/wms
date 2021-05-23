@@ -50,5 +50,6 @@ namespace WMS.UserManagement.DTO
         public DbSet<Product> Products { get; set; }
         public DbSet<UnitOfMessure> UnitOfMessures { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
