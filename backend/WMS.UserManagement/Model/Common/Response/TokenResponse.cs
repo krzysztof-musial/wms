@@ -13,5 +13,11 @@
             var response = new FailedResponse("Provided refresh token is expired");
             return response;
         }
+
+        public static FailedResponse GetAccessTokenIsNotValidResponse()
+        {
+            var response = new FailedResponse("Provided access token is not valid");
+            return response;
+        }
     }
 }

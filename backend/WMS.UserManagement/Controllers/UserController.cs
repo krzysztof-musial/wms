@@ -82,11 +82,23 @@ namespace WMS.UserManagement.Controllers
 
         [AllowAnonymous]
         [HttpPost("RefreshToken")]
-        public IActionResult RefreshToken([FromBody] RefreshToken refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
         {
 
             // TO DO add handling access token
-            var response = await _userService.RefreshToken(refreshToken, "");
+            var response = await _userService.RefreshToken(refreshTokenRequest);
+
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("RevokeToken")]
+        public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest revokeTokenRequest)
+        {
+            var response = await _userService.RevokeToken(revokeTokenRequest);
 
             if (response.Success)
                 return Ok(response);

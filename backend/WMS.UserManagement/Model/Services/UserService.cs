@@ -91,9 +91,9 @@ namespace WMS.UserManagement.Model.Services
             return UserResponse.GetWrongAuthDataResponse();
         }
 
-        public async Task<IResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest, string accessToken)
+        public async Task<IResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest)
         {
-            var principal = GetUserDetailsFromAccessToken(accessToken);
+            var principal = GetUserDetailsFromAccessToken(refreshTokenRequest.AcessToken);
             var username = principal.Identity.Name;
 
             var user = await _userManager.FindByNameAsync(username);
@@ -192,6 +192,39 @@ namespace WMS.UserManagement.Model.Services
 
             SuccessResponse<ResetPasswordResult> successResponse = new SuccessResponse<ResetPasswordResult>(resetPasswordResult);
             return successResponse;
+        }
+
+        
+        public async Task<IResponse> RevokeToken(RevokeTokenRequest revokeTokenRequest)
+        {
+            var userClaims = GetUserDetailsFromAccessToken(revokeTokenRequest.Token);
+            if(userClaims == null)
+            {
+                var response = TokenResponse.GetAccessTokenIsNotValidResponse();
+                return response;
+            }
+
+            var user = await _userManager.FindByNameAsync(userClaims.Identity.Name);
+            var refreshtoken = user.RefreshToken.FirstOrDefault(x => x.Token == revokeTokenRequest.Token);
+
+            if(refreshtoken != null)
+            {
+                refreshtoken.Revoked = DateTime.UtcNow;
+                _dbContext.Update(refreshtoken);
+                _dbContext.SaveChanges();
+
+                RevokeTokenResult revokeTokenResult = new RevokeTokenResult()
+                {
+                    IsSuccess = true
+                };
+                var response = new SuccessResponse<RevokeTokenResult>(revokeTokenResult);
+                return response;
+            }
+            else
+            {
+                var response = TokenResponse.GetRefreshTokenIsNotValidResponse();
+                return response;
+            }
         }
 
         private string GenerateJwtString(User user, Db.Warehouse warehouse)

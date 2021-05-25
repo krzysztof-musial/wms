@@ -12,6 +12,7 @@ namespace WMS.UserManagement.Model.Services
         public Task<IResponse> Login(Login login, string ipAddress);
         public Task<IResponse> AssignUserToWarehouse(AssignUserToWarehouse assignUserToWarehouse, ClaimsPrincipal userClaimsPrincipal);
         public Task<IResponse> ResetPassword(ResetPassword resetPassword);
-        public Task<IResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest, string accessToken);
+        public Task<IResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest);
+        public Task<IResponse> RevokeToken(RevokeTokenRequest revokeTokenRequest);
     }
 }
