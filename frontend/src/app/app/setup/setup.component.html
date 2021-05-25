@@ -1,5 +1,5 @@
-<main class="w-screen min-h-screen p-4 bg-wms-500 flex justify-center items-center relative">
-    <nav class="p-4 flex justify-between items-center absolute top-0 left-0 w-full">
+<main class="w-full min-h-screen bg-wms-500">
+    <nav class="p-4 flex justify-between items-center w-full">
         <div class="hidden lg:block w-20"></div>
         <app-logo [logo]="'big'" [colorIcon]="'white'" [colorText]="'white'" [routerLink]="['/warehouse']"></app-logo>
         <button class="font-semibold uppercase text-sm text-wms-200 flex space-x-1 items-center" (click)="logout()">
@@ -7,54 +7,18 @@
             <app-icon [icon]="'x'" [colorPrimary]="'#7f7f82'"></app-icon>
         </button>
     </nav>
-    <div class="w-screen pt-20 flex flex-col items-center justify-center space-y-6 wms-shadow lg:flex-row lg:items-start lg:space-y-0 lg:space-x-8">
+    <div class="w-full p-4 flex flex-col items-center justify-center space-y-8 wms-shadow lg:flex-row lg:space-y-0 lg:space-x-8">
         <div class="p-8 rounded-xl bg-wms-400 border border-wms-300 flex-shrink-0 max-w-sm w-full">
-
-            <div *ngIf="page === 1">
-                <div class="hidden lg:block w-full h-80 mb-4"></div>
-                <h1 class="text-2xl text-white font-semibold">Create your Warehouse</h1>
-                <p class="text-wms-100 mt-4 mb-6">Follow this step by step tutorial to create your own Warehouse!</p>
-                <button class="bg-wms-accent rounded-lg text-black font-semibold px-8 py-2" (click)="page = 2">Create</button>
-            </div>
-            
-            <div *ngIf="page === 2">
-                <form class="flex flex-col space-y-4 w-full" [formGroup]="createWarehouseForm" (ngSubmit)="createWarehouse(createWarehouseForm.value)">
-                    <div class="flex flex-col space-y-2">
-                        <label for="" class="text-wms-200">Warehouse name</label>
-                        <input type="text" class="wms-input-app mt-2" placeholder="Name" formControlName="name">
-                    </div>
-                    <div class="flex flex-col space-y-2">
-                        <label for="" class="text-wms-200">Select plan</label>
-                        <div class="flex flex-col space-y-4">
-                            <div class="p-4 bg-blue-600 rounded-lg">
-                                <h1 class="text-white text-2xl font-semibold">Free</h1>
-                                <p class="text-white">$0 / month</p>
-                                <hr class="my-4">
-                                <ul class="text-white list-disc list-inside">
-                                    <li>unlimited workers</li>
-                                    <li>unlimited products</li>
-                                    <li>unlimited locations</li>
-                                </ul>
-                            </div>
-                            <div class="p-4 bg-wms-200 rounded-lg">
-                                <h1 class="text-white text-2xl font-semibold">Premium</h1>
-                                <p class="text-white">Not avaliable yet</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex space-x-4 justify-between">
-                        <button class="font-semibold uppercase text-sm text-wms-200 flex space-x-1 items-center" (click)="page = 1">
-                            <app-icon [icon]="'x'" [colorPrimary]="'#7f7f82'"></app-icon>
-                            <span>Cancel</span>
-                        </button>
-                        <input class="wms-submit-app" type="submit" value="Create" [disabled]="!createWarehouseForm.valid">
-                    </div>
-                </form>
-            </div>
-
+            <!-- <div class="hidden lg:block w-full h-80 mb-4"></div> -->
+            <h1 class="text-2xl text-white font-semibold">Create your Warehouse</h1>
+            <p class="text-wms-100 mt-4 mb-6">Follow this step by step tutorial to create your own Warehouse!</p>
+            <form class="flex space-x-4" [formGroup]="createWarehouseForm" (ngSubmit)="createWarehouse(createWarehouseForm.value)">
+                <input type="text" class="wms-input-app" placeholder="Warehouse name" formControlName="name">
+                <input class="wms-submit-app" type="submit" value="Create" [disabled]="!createWarehouseForm.valid">
+            </form>
         </div>
         <div class="p-8 rounded-xl bg-wms-400 border border-wms-300 flex-shrink-0 max-w-sm">
-            <div class="hidden lg:block w-full h-80 mb-4"></div>
+            <!-- <div class="hidden lg:block w-full h-80 mb-4"></div> -->
             <h1 class="text-2xl text-white font-semibold">Join the Warehouse</h1>
             <p class="text-wms-100 mt-4 mb-6">Paste the ID of a Warehouse you want to join. Ask the owner for the code.</p>
             <form action="" class="flex space-x-4">

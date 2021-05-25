@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -24,6 +25,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { HasWarehouseGuard } from './shared/guards/has-warehouse.guard';
 import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
+import { HttpRequestInterceptor } from './shared/interceptors/http-request.interceptor';
 
 @NgModule({
   declarations: [
@@ -46,10 +48,12 @@ import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true},
     AuthGuard,
     NoAuthGuard,
     HasWarehouseGuard,

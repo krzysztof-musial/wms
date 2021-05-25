@@ -26,9 +26,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(form: any): void {
-    console.log(form);
     this.auth.register(form);
-    this.registerForm.reset();
   }
 
 }
