@@ -1,0 +1,32 @@
+<div class="setup w-full h-screen bg-wms-500">
+    <div class="w-full p-4 flex justify-between items-center">
+        <div class="hidden md:block"></div>
+        <div>
+            <app-svg [src]="'logo'" [primary]="'white'" [secondary]="'white'"></app-svg>
+        </div>
+        <div class="flex items-center space-x-1 cursor-pointer" (click)="logout()">
+            <!-- <app-svg [src]="'x'" [primary]="'rgb(156, 163, 175)'"></app-svg> -->
+            <button class="font-medium text-sm text-gray-400 uppercase rounded hover:text-white">✖ Logout</button>
+        </div>
+    </div>
+    <div class="flex justify-center items-center">
+        <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+            <div class="p-8 rounded-xl bg-wms-400 border border-wms-300 flex-shrink-0 max-w-sm w-full">
+                <h1 class="text-2xl text-white font-semibold">Create your Warehouse</h1>
+                <p class="text-wms-100 mt-4 mb-6">Follow this step by step tutorial to create your own Warehouse!</p>
+                <form class="flex space-x-4" [formGroup]="createWarehouseForm" (ngSubmit)="createWarehouse(createWarehouseForm.value)">
+                    <input type="text" class="wms-input-app" placeholder="Warehouse name" formControlName="name">
+                    <input class="wms-submit-app" type="submit" value="Create" [disabled]="!createWarehouseForm.valid">
+                </form>
+            </div>
+            <div class="p-8 rounded-xl bg-wms-400 border border-wms-300 flex-shrink-0 max-w-sm">
+                <h1 class="text-2xl text-white font-semibold">Join the Warehouse</h1>
+                <p class="text-wms-100 mt-4 mb-6">Paste the ID of a Warehouse you want to join. Ask the owner for the code.</p>
+                <form class="flex space-x-4" [formGroup]="joinWarehouseForm" (ngSubmit)="joinWarehouse(joinWarehouseForm.value)">
+                    <input type="text" class="wms-input-app" placeholder="Paste the ID here" formControlName="warehouseId">
+                    <input class="wms-submit-app" type="submit" value="Join" [disabled]="!joinWarehouseForm.valid">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

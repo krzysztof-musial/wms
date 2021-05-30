@@ -3,7 +3,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 /* You can add global styles to this file, and also import other style files */
-/* Ignore the errors after @apply */
 .wms-input {
     @apply rounded border-gray-300 w-full;
 }
@@ -30,9 +29,6 @@
             @apply hover:bg-wms-300 hover:text-wms-200;
         }
     }
-}
-.wms-shadow {
-    filter: drop-shadow(15px 15px 30px rgba(0, 0, 0, 0.5));
 }
 .wms-active {
     @apply bg-wms-400 text-white;

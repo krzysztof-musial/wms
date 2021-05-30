@@ -4,45 +4,44 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// Components
+
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { LogoComponent } from './shared/components/logo/logo.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { WarehouseComponent } from './app/warehouse/warehouse.component';
-import { SetupComponent } from './app/setup/setup.component';
-import { DashboardComponent } from './app/warehouse/dashboard/dashboard.component';
-import { IconComponent } from './shared/components/icon/icon.component';
-import { SettingsComponent } from './app/warehouse/settings/settings.component';
-import { WorkersComponent } from './app/warehouse/workers/workers.component';
-import { StorageComponent } from './app/warehouse/storage/storage.component';
-import { ProductsComponent } from './app/warehouse/products/products.component';
-import { ActionsComponent } from './app/warehouse/actions/actions.component';
-// Other
-import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
-import { AuthGuard } from './shared/guards/auth.guard';
-import { NoAuthGuard } from './shared/guards/no-auth.guard';
-import { HasWarehouseGuard } from './shared/guards/has-warehouse.guard';
-import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
-import { HttpRequestInterceptor } from './shared/interceptors/http-request.interceptor';
+import { HomeComponent } from './pages/home/home.component';
+import { SvgComponent } from './components/svg/svg.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { WarehouseComponent } from './pages/warehouse/warehouse.component';
+import { DashboardComponent } from './pages/warehouse/dashboard/dashboard.component';
+import { SettingsComponent } from './pages/warehouse/settings/settings.component';
+import { WorkersComponent } from './pages/warehouse/workers/workers.component';
+import { StorageComponent } from './pages/warehouse/storage/storage.component';
+import { ProductsComponent } from './pages/warehouse/products/products.component';
+import { ActionsComponent } from './pages/warehouse/actions/actions.component';
+import { SetupComponent } from './pages/setup/setup.component';
+import { AuthGuard } from './guards/auth.guard';
+import { HasWarehouseGuard } from './guards/has-warehouse.guard';
+import { NoAuthGuard } from './guards/no-auth.guard';
+import { NoWarehouseGuard } from './guards/no-warehouse.guard';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { HttpRequestInterceptor } from './interceptors/http-request.interceptor';
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LogoComponent,
+    SvgComponent,
     LoginComponent,
     RegisterComponent,
     WarehouseComponent,
-    SetupComponent,
     DashboardComponent,
-    IconComponent,
     SettingsComponent,
     WorkersComponent,
     StorageComponent,
     ProductsComponent,
-    ActionsComponent
+    ActionsComponent,
+    SetupComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,

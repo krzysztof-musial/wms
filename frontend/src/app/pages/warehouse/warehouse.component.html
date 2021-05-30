@@ -1,0 +1,32 @@
+<!-- MENU MOBILE -->
+<div @slideInOut class="md:hidden w-min fixed top:0 z-10" *ngIf="open">
+    <app-menu [mobile]="true">
+        <burger>
+            <button (click)="toggleMenu()">
+                <app-svg [src]="'exit'" [primary]="'white'"></app-svg>
+            </button>
+        </burger>
+    </app-menu>
+</div>
+<div class="warehouse h-screen w-full">
+    <!-- MENU -->
+    <div class="hidden md:block w-min">
+        <app-menu [size]="size" mobile="false"></app-menu>
+    </div>
+    <!-- MAIN -->
+    <div class="w-screen md:w-full bg-wms-500 text-white pt-4">
+        <!-- HEADER -->
+        <div class="flex items-center justify-between p-4 px-8 sticky top-0 bg-wms-500">
+            <button class="md:hidden" (click)="toggleMenu()">
+                <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
+            </button>
+            <button class="hidden md:block" (click)="toggleSize()">
+                <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
+            </button>
+        </div>
+        <!-- CONTENT -->
+        <div class="p-8 pt-4">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

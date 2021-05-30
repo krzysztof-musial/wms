@@ -1,28 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// Guards
-import { AuthGuard } from './shared/guards/auth.guard';
-import { HasWarehouseGuard } from './shared/guards/has-warehouse.guard';
-import { NoWarehouseGuard } from './shared/guards/no-warehouse.guard';
-// Components
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { SetupComponent } from './app/setup/setup.component';
-import { WarehouseComponent } from './app/warehouse/warehouse.component';
-import { DashboardComponent } from './app/warehouse/dashboard/dashboard.component';
-import { SettingsComponent } from './app/warehouse/settings/settings.component';
-import { ActionsComponent } from './app/warehouse/actions/actions.component';
-import { ProductsComponent } from './app/warehouse/products/products.component';
-import { StorageComponent } from './app/warehouse/storage/storage.component';
-import { WorkersComponent } from './app/warehouse/workers/workers.component';
-import { NoAuthGuard } from './shared/guards/no-auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { HasWarehouseGuard } from './guards/has-warehouse.guard';
+import { NoAuthGuard } from './guards/no-auth.guard';
+import { NoWarehouseGuard } from './guards/no-warehouse.guard';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { SetupComponent } from './pages/setup/setup.component';
+import { ActionsComponent } from './pages/warehouse/actions/actions.component';
+import { DashboardComponent } from './pages/warehouse/dashboard/dashboard.component';
+import { ProductsComponent } from './pages/warehouse/products/products.component';
+import { SettingsComponent } from './pages/warehouse/settings/settings.component';
+import { StorageComponent } from './pages/warehouse/storage/storage.component';
+import { WarehouseComponent } from './pages/warehouse/warehouse.component';
+import { WorkersComponent } from './pages/warehouse/workers/workers.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [NoAuthGuard]},
   {path: 'login', component: LoginComponent, canActivate: [NoAuthGuard]},
   {path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard]},
-  // Auth routes
+  // Auth pages
   {path: 'warehouse', component: WarehouseComponent, canActivateChild: [AuthGuard, HasWarehouseGuard], children: [
     {path: '', component: DashboardComponent},
     {path: 'settings', component: SettingsComponent},
