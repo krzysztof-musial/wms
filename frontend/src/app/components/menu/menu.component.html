@@ -1,4 +1,4 @@
-<div class="w-full h-screen sticky top-0 flex flex-col justify-between p-4 bg-wms-500 border-r border-wms-400 text-white">
+<div class="w-full h-screen overflow-y-auto flex flex-col justify-between p-4 bg-wms-500 border-r border-wms-400 text-white">
     <div class="flex flex-col" [class.space-y-4]="size === 'small'" [class.space-y-8]="size === 'big' || mobile === true">
         <div class="flex justify-between items-center">
             <div class="p-4 cursor-pointer" [routerLink]="['/warehouse']" *ngIf="size === 'big' || mobile === true">

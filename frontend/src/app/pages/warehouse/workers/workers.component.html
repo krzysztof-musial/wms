@@ -1,1 +1,62 @@
-<p>workers works!</p>
+<div class="max-w-screen-lg m-auto">
+    <div class="flex flex-col space-y-2 mb-8">
+        <h1 class="text-2xl font-semibold">Workers</h1>
+        <p class="text-wms-100">Here you can manage workers of your Warehouse.</p>
+    </div>
+    <table class="w-full whitespace-nowrap">
+        <!-- HEAD -->
+        <tr class="text-left text-wms-200 text-xs uppercase">
+            <th class="bg-wms-400 px-4 py-2 font-medium border-l border-t border-b border-wms-300">
+                    #
+            </th>
+            <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Name
+            </th>
+            <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Email
+            </th>
+            <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Role
+            </th>
+            <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
+            <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
+                •••
+            </th>
+        </tr>
+        <!-- LOOP -->
+        <tr *ngFor="let worker of workers; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+            <td class="px-4 py-4">{{ i+1 }}</td>
+            <td class="px-4 py-4">{{ worker.firstName }} {{ worker.lastName }}</td>
+            <td class="px-4 py-4">{{ worker.email }}</td>
+            <td class="px-4 py-4">
+                <span class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Worker</span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <!-- Candidates -->
+        <tr *ngFor="let candidate of candidates; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+            <td class="px-4 py-4"></td>
+            <td class="px-4 py-4">{{ candidate.id }}</td>
+            <td class="px-4 py-4"></td>
+            <td class="px-4 py-4">
+                <span class="bg-yellow-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Candidate</span>
+            </td>
+            <td></td>
+            <td class="p-4 flex items-center space-x-2">
+                <button class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="acceptCandidate(candidate.id)">Accept</button>
+                <button class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="declineCandidate(candidate.id)">Decline</button>
+            </td>
+        </tr>
+    </table>
+    <!-- Invite -->
+    <div class="p-8 mt-8 rounded-xl border border-wms-300 w-full flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold">Invitations</h1>
+            <p class="text-wms-100">You can make users join your Warehouse, just tell them to use your Warehouse's ID in the Join Warehouse box.</p>
+        </div>
+        <div class="bg-wms-100 rounded-xl p-6 text-black text-3xl font-bold">
+            3
+        </div>
+    </div>
+</div>

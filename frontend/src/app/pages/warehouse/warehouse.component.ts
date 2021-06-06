@@ -1,5 +1,7 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
   selector: 'app-warehouse',
@@ -22,10 +24,16 @@ export class WarehouseComponent implements OnInit {
 
   open: boolean = true;
   size: string = 'big';
+  warehouse;
+  user;
 
-  constructor() { }
+  constructor(private ws: WarehouseService, private auth: AuthService) { }
 
   ngOnInit(): void {
+    this.ws.getWarehouse().subscribe((data) => {
+      this.warehouse = data;
+    })
+    this.user = this.auth.decodeToken();
   }
 
   // For mobile

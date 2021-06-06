@@ -1,3 +1,9 @@
+// Response
+export interface IResponse {
+    success: boolean,
+    message: any,
+    data: any
+}
 // Token decoded
 export interface IToken {
     exp: number,

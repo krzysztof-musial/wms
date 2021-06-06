@@ -11,18 +11,36 @@
 <div class="warehouse h-screen w-full">
     <!-- MENU -->
     <div class="hidden md:block w-min">
-        <app-menu [size]="size" mobile="false"></app-menu>
+        <div class="sticky top-0">
+            <app-menu [size]="size" mobile="false"></app-menu>
+        </div>
     </div>
     <!-- MAIN -->
     <div class="w-screen md:w-full bg-wms-500 text-white pt-4">
         <!-- HEADER -->
-        <div class="flex items-center justify-between p-4 px-8 sticky top-0 bg-wms-500">
-            <button class="md:hidden" (click)="toggleMenu()">
-                <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
-            </button>
-            <button class="hidden md:block" (click)="toggleSize()">
-                <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
-            </button>
+        <div class="grid grid-cols-3 p-4 px-8 sticky top-0 bg-wms-500">
+            <div class="flex justify-start items-center">
+                <button class="md:hidden" (click)="toggleMenu()">
+                    <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
+                </button>
+                <button class="hidden md:block" (click)="toggleSize()">
+                    <app-svg [src]="'burger'" [primary]="'white'"></app-svg>
+                </button>
+            </div>
+            <div class="flex justify-center items-center space-x-4">
+                <!-- <div *ngIf="warehouse" class="rounded-lg px-4 py-2 flex space-x-2 hover:bg-wms-400 cursor-pointer">
+                    <p class="font-base text-sm whitespace-nowrap">{{ warehouse?.name }}</p>
+                </div> -->
+            </div>
+            <div class="flex space-x-4 justify-end items-center">
+                <div class="hidden md:flex md:flex-col">
+                    <p class="text-sm text-right">{{ user.userFirstName }} {{ user.userLastName }}</p>
+                    <p class="text-xs text-right text-gray-400">{{ user.userEmail }}</p>
+                </div>
+                <div class="rounded-full bg-blue-500 h-9 w-9 flex justify-center items-center font-medium">
+                    {{ user.userLastName[0] }}
+                </div>
+            </div>
         </div>
         <!-- CONTENT -->
         <div class="p-8 pt-4">

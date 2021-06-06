@@ -36,4 +36,44 @@ export class WarehouseService {
     })
   }
 
+  getWarehouse() {
+    return this.http.get(this.url + '/warehouses/' + this.auth.decodeToken().warehouseId);
+  }
+
+  warehouseMembers() {
+    return this.http.get(this.url + '/warehouses/getwarehousemembers/' + this.auth.decodeToken().warehouseId);
+  }
+
+  getCandidates() {
+    return this.http.get(this.url + '/invitation/');
+  }
+
+  acceptCandidate(id) {
+    const candidate = {
+      Id: id
+    }
+    this.http.post<any>(this.url + '/invitation/', candidate).subscribe({
+      next: data => {
+        console.log(data)
+      },
+      error: error => {
+        console.error('There was an error!', error);
+      }
+    })
+  }
+
+  declineCandidate(id) {
+    const candidate = {
+      Id: id
+    }
+    this.http.post<any>(this.url + '/invitation/declineinvitation/', candidate).subscribe({
+      next: data => {
+        console.log(data)
+      },
+      error: error => {
+        console.error('There was an error!', error);
+      }
+    })
+  }
+
 }
