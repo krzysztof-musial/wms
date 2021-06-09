@@ -45,14 +45,14 @@ export class WarehouseService {
   }
 
   getCandidates() {
-    return this.http.get(this.url + '/invitation/');
+    return this.http.get(this.url + '/invitation/getallwarehouseactiveinvitations/');
   }
 
   acceptCandidate(id) {
     const candidate = {
       Id: id
     }
-    this.http.post<any>(this.url + '/invitation/', candidate).subscribe({
+    this.http.post<any>(this.url + '/invitation/approveinvitation/', candidate).subscribe({
       next: data => {
         console.log(data)
       },

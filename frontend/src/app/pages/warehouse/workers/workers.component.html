@@ -37,8 +37,8 @@
         <!-- Candidates -->
         <tr *ngFor="let candidate of candidates; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
             <td class="px-4 py-4"></td>
-            <td class="px-4 py-4">{{ candidate.id }}</td>
-            <td class="px-4 py-4"></td>
+            <td class="px-4 py-4">{{ candidate.user.firstName }} {{ candidate.user.lastName }}</td>
+            <td class="px-4 py-4">{{ candidate.user.email }}</td>
             <td class="px-4 py-4">
                 <span class="bg-yellow-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Candidate</span>
             </td>
