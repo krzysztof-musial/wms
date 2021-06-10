@@ -1,1 +1,45 @@
-<p>products works!</p>
+<div class="max-w-screen-lg m-auto">
+    <!-- Tables -->
+    <div class="flex flex-col space-y-2 mb-8">
+        <h1 class="text-2xl font-semibold">Products</h1>
+        <p class="text-wms-100">Here you can manage your products.</p>
+    </div>
+    <div class="mb-8">
+        <form action="" class="flex space-x-4 items-center">
+            <input type="text" placeholder="Product name" class="wms-input-app bg-wms-400">
+            <input type="number" placeholder="Product amount" class="wms-input-app bg-wms-400">
+            <input class="wms-submit-app" type="submit" value="Add">
+        </form>
+    </div>
+    <div class="max-w-screen-lg overflow-x-auto">
+        <table class="w-full whitespace-nowrap">
+            <!-- HEAD -->
+            <tr class="text-left text-wms-200 text-xs uppercase">
+                <th class="bg-wms-400 px-4 py-2 font-medium border-l border-t border-b border-wms-300">
+                    #
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Name
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Amount
+                </th>
+                <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
+                    •••
+                </th>
+            </tr>
+            <!-- WORKERS -->
+            <!-- <tr *ngFor="let worker of workers; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+                <td class="px-4 py-4">{{ i+1 }}</td>
+                <td class="px-4 py-4">{{ worker.firstName }} {{ worker.lastName }}</td>
+                <td class="px-4 py-4">{{ worker.email }}</td>
+                <td class="px-4 py-4">
+                    <span class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Worker</span>
+                </td>
+                <td></td>
+                <td></td>
+            </tr> -->
+        </table>
+    </div>
+</div>
