@@ -1158,6 +1158,11 @@ select{
   color: rgba(2, 102, 214, var(--tw-text-opacity));
 }
 
+.text-wms-accent{
+  --tw-text-opacity: 1;
+  color: rgba(30, 255, 228, var(--tw-text-opacity));
+}
+
 .hover\:text-black:hover{
   --tw-text-opacity: 1;
   color: rgba(0, 0, 0, var(--tw-text-opacity));
@@ -1170,6 +1175,10 @@ select{
 
 .uppercase{
   text-transform: uppercase;
+}
+
+.hover\:underline:hover{
+  text-decoration: underline;
 }
 
 .whitespace-nowrap{
