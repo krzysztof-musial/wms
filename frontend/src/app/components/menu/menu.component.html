@@ -30,8 +30,8 @@
                 <span [class.hidden]="size === 'small'">Workers</span>
             </li>
             <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/storage']" routerLinkActive="wms-active">
-                <app-svg *ngIf="router.url != '/warehouse/storage'" [src]="'storage'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
-                <app-svg *ngIf="router.url == '/warehouse/storage'" [src]="'storage-fill'" [primary]="'white'"></app-svg>
+                <app-svg *ngIf="router.url != '/warehouse/storage'" [src]="'folder'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/storage'" [src]="'folder-fill'" [primary]="'white'"></app-svg>
                 <span [class.hidden]="size === 'small'">Storage</span>
             </li>
             <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/locations']" routerLinkActive="wms-active">

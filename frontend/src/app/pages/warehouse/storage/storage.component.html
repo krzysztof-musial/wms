@@ -28,8 +28,8 @@
             <!-- Locations -->
             <tr *ngFor="let article of articles; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
                 <td class="px-4 py-4">{{ article.article_id }}</td>
-                <td class="px-4 py-4">{{ article.LocationId }}</td>
-                <td class="px-4 py-4">{{ article.ProductId }}</td>
+                <td class="px-4 py-4"><span class="bg-white rounded px-2 py-1 uppercase text-black text-xs font-semibold mr-2">{{ article.LocationId }}</span>{{ article.locationArticle.location_code }}</td>
+                <td class="px-4 py-4"><span class="bg-white rounded px-2 py-1 uppercase text-black text-xs font-semibold mr-2">{{ article.ProductId }}</span>{{ article.productArticle.product_name }}</td>
                 <td class="px-4 py-4">{{ article.article_quantity }}</td>
                 <td></td>
                 <td></td>
