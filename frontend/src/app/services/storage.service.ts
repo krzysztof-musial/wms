@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 })
 export class StorageService {
 
-  url: string = 'http://jannso.profipoint.pl:8228/tu/article';
+  url: string = 'https://jannso.profipoint.pl:8228/tu/article';
 
   constructor(private http: HttpClient, private router: Router) { }
 

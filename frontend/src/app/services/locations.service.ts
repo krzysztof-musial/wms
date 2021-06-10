@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 })
 export class LocationsService {
 
-  url: string = 'http://jannso.profipoint.pl:8228/tu/locations';
+  url: string = 'https://jannso.profipoint.pl:8228/tu/locations';
 
   constructor(private http: HttpClient, private router: Router) { }
 

@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 })
 export class ProductsService {
 
-  url: string = 'http://jannso.profipoint.pl:8228/tu/product';
+  url: string = 'https://jannso.profipoint.pl:8228/tu/product';
 
   constructor(private http: HttpClient, private router: Router) { }
 
