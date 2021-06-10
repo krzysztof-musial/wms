@@ -1609,7 +1609,7 @@ class ProductsService {
     constructor(http, router) {
         this.http = http;
         this.router = router;
-        this.url = 'http://jannso.profipoint.pl:8228/tu/product';
+        this.url = 'https://jannso.profipoint.pl:8228/tu/product';
     }
     getAllProducts() {
         return this.http.get(this.url);
@@ -2706,7 +2706,7 @@ class StorageService {
     constructor(http, router) {
         this.http = http;
         this.router = router;
-        this.url = 'http://jannso.profipoint.pl:8228/tu/article';
+        this.url = 'https://jannso.profipoint.pl:8228/tu/article';
     }
     getAllArticles() {
         return this.http.get(this.url);
@@ -2780,7 +2780,7 @@ class LocationsService {
     constructor(http, router) {
         this.http = http;
         this.router = router;
-        this.url = 'http://jannso.profipoint.pl:8228/tu/locations';
+        this.url = 'https://jannso.profipoint.pl:8228/tu/locations';
     }
     getAllLocations() {
         return this.http.get(this.url);
