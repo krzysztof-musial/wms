@@ -10,6 +10,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { SetupComponent } from './pages/setup/setup.component';
 import { ActionsComponent } from './pages/warehouse/actions/actions.component';
 import { DashboardComponent } from './pages/warehouse/dashboard/dashboard.component';
+import { LocationsComponent } from './pages/warehouse/locations/locations.component';
 import { ProductsComponent } from './pages/warehouse/products/products.component';
 import { SettingsComponent } from './pages/warehouse/settings/settings.component';
 import { StorageComponent } from './pages/warehouse/storage/storage.component';
@@ -26,6 +27,7 @@ const routes: Routes = [
     {path: 'settings', component: SettingsComponent},
     {path: 'workers', component: WorkersComponent},
     {path: 'storage', component: StorageComponent},
+    {path: 'locations', component: LocationsComponent},
     {path: 'products', component: ProductsComponent},
     {path: 'actions', component: ActionsComponent},
   ]},

@@ -5,10 +5,11 @@
         <p class="text-wms-100">Here you can manage your products.</p>
     </div>
     <div class="mb-8">
-        <form action="" class="flex space-x-4 items-center">
-            <input type="text" placeholder="Product name" class="wms-input-app bg-wms-400">
-            <input type="number" placeholder="Product amount" class="wms-input-app bg-wms-400">
-            <input class="wms-submit-app" type="submit" value="Add">
+        <form [formGroup]="addProductForm" (ngSubmit)="addProduct(addProductForm.value)" class="flex space-x-4 items-center">
+            <input type="text" placeholder="Product name" formControlName="product_name" class="wms-input-app bg-wms-400">
+            <input type="text" placeholder="Product code" formControlName="product_code" class="wms-input-app bg-wms-400">
+            <input type="text" placeholder="Product description" formControlName="product_description" class="wms-input-app bg-wms-400">
+            <input class="wms-submit-app" type="submit" value="Add" [disabled]="!addProductForm.valid">
         </form>
     </div>
     <div class="max-w-screen-lg overflow-x-auto">
@@ -22,24 +23,25 @@
                     Name
                 </th>
                 <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
-                    Amount
+                    Code
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Description
                 </th>
                 <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
                 <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
                     •••
                 </th>
             </tr>
-            <!-- WORKERS -->
-            <!-- <tr *ngFor="let worker of workers; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
-                <td class="px-4 py-4">{{ i+1 }}</td>
-                <td class="px-4 py-4">{{ worker.firstName }} {{ worker.lastName }}</td>
-                <td class="px-4 py-4">{{ worker.email }}</td>
-                <td class="px-4 py-4">
-                    <span class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Worker</span>
-                </td>
+            <!-- Products -->
+            <tr *ngFor="let product of products; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+                <td class="px-4 py-4">{{ product.product_id }}</td>
+                <td class="px-4 py-4">{{ product.product_name }}</td>
+                <td class="px-4 py-4">{{ product.product_code }}</td>
+                <td class="px-4 py-4">{{ product.product_description }}</td>
                 <td></td>
                 <td></td>
-            </tr> -->
+            </tr>
         </table>
     </div>
 </div>

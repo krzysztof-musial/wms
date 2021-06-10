@@ -1,8 +1,14 @@
 <div class="max-w-screen-lg m-auto">
     <!-- Tables -->
     <div class="flex flex-col space-y-2 mb-8">
-        <h1 class="text-2xl font-semibold">Storage</h1>
-        <p class="text-wms-100">Here you can manage your storage.</p>
+        <h1 class="text-2xl font-semibold">Locations</h1>
+        <p class="text-wms-100">Here you can manage your location places.</p>
+    </div>
+    <div class="mb-8">
+        <form [formGroup]="addLocationForm" (ngSubmit)="addLocation(addLocationForm.value)" class="flex space-x-4 items-center">
+            <input type="text" placeholder="Location code" formControlName="location_code" class="wms-input-app bg-wms-400">
+            <input class="wms-submit-app" type="submit" value="Add" [disabled]="!addLocationForm.valid">
+        </form>
     </div>
     <div class="max-w-screen-lg overflow-x-auto">
         <table class="w-full whitespace-nowrap">
@@ -12,13 +18,7 @@
                     #
                 </th>
                 <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
-                    Location
-                </th>
-                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
-                    Product
-                </th>
-                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
-                    Amount
+                    Code
                 </th>
                 <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
                 <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
@@ -26,11 +26,9 @@
                 </th>
             </tr>
             <!-- Locations -->
-            <tr *ngFor="let article of articles; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
-                <td class="px-4 py-4">{{ article.article_id }}</td>
-                <td class="px-4 py-4">{{ article.LocationId }}</td>
-                <td class="px-4 py-4">{{ article.ProductId }}</td>
-                <td class="px-4 py-4">{{ article.article_quantity }}</td>
+            <tr *ngFor="let location of locations; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+                <td class="px-4 py-4">{{ location.location_id }}</td>
+                <td class="px-4 py-4">{{ location.location_code }}</td>
                 <td></td>
                 <td></td>
             </tr>

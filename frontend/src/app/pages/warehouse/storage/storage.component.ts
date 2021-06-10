@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-storage',
@@ -7,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StorageComponent implements OnInit {
 
-  constructor() { }
+  articles;
+
+  constructor(private fb: FormBuilder, private ss: StorageService) {
+    this.ss.getAllArticles().subscribe((articles) => {
+      this.articles = articles;
+    })
+  }
 
   ngOnInit(): void {
   }

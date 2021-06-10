@@ -25,6 +25,7 @@ import { NoWarehouseGuard } from './guards/no-warehouse.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HttpRequestInterceptor } from './interceptors/http-request.interceptor';
 import { MenuComponent } from './components/menu/menu.component';
+import { LocationsComponent } from './pages/warehouse/locations/locations.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MenuComponent } from './components/menu/menu.component';
     ProductsComponent,
     ActionsComponent,
     SetupComponent,
-    MenuComponent
+    MenuComponent,
+    LocationsComponent
   ],
   imports: [
     BrowserModule,

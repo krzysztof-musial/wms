@@ -34,6 +34,11 @@
                 <app-svg *ngIf="router.url == '/warehouse/storage'" [src]="'storage-fill'" [primary]="'white'"></app-svg>
                 <span [class.hidden]="size === 'small'">Storage</span>
             </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/locations']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/locations'" [src]="'storage'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/locations'" [src]="'storage-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Locations</span>
+            </li>
             <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/products']" routerLinkActive="wms-active">
                 <app-svg *ngIf="router.url != '/warehouse/products'" [src]="'products'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
                 <app-svg *ngIf="router.url == '/warehouse/products'" [src]="'products-fill'" [primary]="'white'"></app-svg>

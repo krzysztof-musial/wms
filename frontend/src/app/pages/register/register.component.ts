@@ -27,10 +27,10 @@ export class RegisterComponent implements OnInit {
   constructor(private fb: FormBuilder, private auth: AuthService) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required] ],
-      lastName: ['', [Validators.required] ],
-      email: ['', [Validators.required, Validators.email] ],
-      password: ['', [Validators.required] ],
-      passwordConfirmation: ['', [Validators.required] ],
+      lastName: ['Testowy', [Validators.required] ],
+      email: ['@testowy.com', [Validators.required, Validators.email] ],
+      password: ['Password123$', [Validators.required] ],
+      passwordConfirmation: ['Password123$', [Validators.required] ],
       agreement: [false, [Validators.requiredTrue] ]
     }, { validators: (group: FormGroup) => {return group.controls.password.value === group.controls.passwordConfirmation.value ? null : {notSame: true}} });
   }
