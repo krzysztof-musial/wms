@@ -16,15 +16,7 @@ export class ProductsService {
   }
 
   addProduct(product: any) {
-    console.log(product);
-    this.http.post<any>(this.url, product).subscribe({
-      next: data => {
-        console.log(data);
-      },
-      error: error => {
-        console.error('There was an error!', error);
-      }
-    })
+    return this.http.post<any>(this.url, product);
   }
 
 }

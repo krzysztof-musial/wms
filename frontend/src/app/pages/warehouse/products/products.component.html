@@ -7,7 +7,7 @@
     <div class="mb-8">
         <form [formGroup]="addProductForm" (ngSubmit)="addProduct(addProductForm.value)" class="flex space-x-4 items-center">
             <input type="text" placeholder="Product name" formControlName="product_name" class="wms-input-app bg-wms-400">
-            <input type="text" placeholder="Product code" formControlName="product_code" class="wms-input-app bg-wms-400">
+            <input type="text" placeholder="Product code" formControlName="product_code" class="wms-input-app bg-wms-400" maxlength="4">
             <input type="text" placeholder="Product description" formControlName="product_description" class="wms-input-app bg-wms-400">
             <input class="wms-submit-app" type="submit" value="Add" [disabled]="!addProductForm.valid">
         </form>

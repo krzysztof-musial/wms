@@ -33,6 +33,10 @@ export class SetupComponent implements OnInit {
     this.ws.joinWarehouse(form);
   }
 
+  refreshToken() {
+    this.auth.refreshToken();
+  }
+
   logout() {
     this.auth.logout();
   }

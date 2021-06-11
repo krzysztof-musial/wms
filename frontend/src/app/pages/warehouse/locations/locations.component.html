@@ -6,7 +6,15 @@
     </div>
     <div class="mb-8">
         <form [formGroup]="addLocationForm" (ngSubmit)="addLocation(addLocationForm.value)" class="flex space-x-4 items-center">
-            <input type="text" placeholder="Location code" formControlName="location_code" class="wms-input-app bg-wms-400">
+            <!-- <input type="text" placeholder="Location code" formControlName="location_code" class="wms-input-app bg-wms-400"> -->
+            <select class="wms-input-app bg-wms-400" formControlName="location_symbol">
+                <option value="" disabled selected hidden>Location symbol</option>
+                <option value="W">W - Warehouse</option>
+                <option value="B">B - Bufor</option>
+                <option value="E">E - Export</option>
+                <option value="I">I - Import</option>
+            </select>
+            <input type="number" class="wms-input-app bg-wms-400" min="1" max="100" value="1" formControlName="location_index" placeholder="Location index">
             <input class="wms-submit-app" type="submit" value="Add" [disabled]="!addLocationForm.valid">
         </form>
     </div>

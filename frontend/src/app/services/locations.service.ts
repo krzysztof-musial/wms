@@ -16,15 +16,7 @@ export class LocationsService {
   }
 
   addLocation(location: any) {
-    console.log(location);
-    this.http.post<any>(this.url, location).subscribe({
-      next: data => {
-        console.log(data);
-      },
-      error: error => {
-        console.error('There was an error!', error);
-      }
-    })
+    return this.http.post<any>(this.url, location);
   }
 
 }

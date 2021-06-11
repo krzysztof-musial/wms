@@ -52,28 +52,14 @@ export class WarehouseService {
     const candidate = {
       Id: id
     }
-    this.http.post<any>(this.url + '/invitation/approveinvitation/', candidate).subscribe({
-      next: data => {
-        console.log(data)
-      },
-      error: error => {
-        console.error('There was an error!', error);
-      }
-    })
+    return this.http.post<any>(this.url + '/invitation/approveinvitation/', candidate);
   }
 
   declineCandidate(id) {
     const candidate = {
       Id: id
     }
-    this.http.post<any>(this.url + '/invitation/declineinvitation/', candidate).subscribe({
-      next: data => {
-        console.log(data)
-      },
-      error: error => {
-        console.error('There was an error!', error);
-      }
-    })
+    return this.http.post<any>(this.url + '/invitation/declineinvitation/', candidate);
   }
 
 }

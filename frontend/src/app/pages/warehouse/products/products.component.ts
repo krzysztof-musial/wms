@@ -27,7 +27,17 @@ export class ProductsComponent implements OnInit {
   }
 
   addProduct(form) {
-    this.ps.addProduct(form);
+    const product = {
+      product_name: form.product_name,
+      product_code: form.product_code.toUpperCase(),
+      product_description: form.product_description
+    }
+    this.ps.addProduct(product).subscribe((data) => {
+      this.ps.getAllProducts().subscribe((products) => {
+        this.products = products;
+        this.addProductForm.reset();
+      })
+    });
   }
 
 }

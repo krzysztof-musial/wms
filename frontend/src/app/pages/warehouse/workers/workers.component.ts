@@ -28,11 +28,25 @@ export class WorkersComponent implements OnInit {
   }
 
   acceptCandidate(id) {
-    this.ws.acceptCandidate(id);
+    this.ws.acceptCandidate(id).subscribe((data) => {
+      this.ws.warehouseMembers().subscribe((data) => {
+        this.workers = data;
+      })
+      this.ws.getCandidates().subscribe((data: IResponse) => {
+        this.candidates = data.data;
+      })
+    });
   }
 
   declineCandidate(id) {
-    this.ws.declineCandidate(id);
+    this.ws.declineCandidate(id).subscribe((data) => {
+      this.ws.warehouseMembers().subscribe((data) => {
+        this.workers = data;
+      })
+      this.ws.getCandidates().subscribe((data: IResponse) => {
+        this.candidates = data.data;
+      })
+    });
   }
 
 }

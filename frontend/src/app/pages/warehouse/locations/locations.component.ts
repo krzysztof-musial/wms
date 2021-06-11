@@ -17,7 +17,9 @@ export class LocationsComponent implements OnInit {
       this.locations = locations;
     })
     this.addLocationForm = this.fb.group({
-      location_code: ['', [Validators.required] ]
+      // location_code: ['', [Validators.required] ]
+      location_symbol: ['', [Validators.required] ],
+      location_index: ['', [Validators.required] ]
     });
   }
 
@@ -25,7 +27,23 @@ export class LocationsComponent implements OnInit {
   }
 
   addLocation(form) {
-    this.ls.addLocation(form);
+    let index;
+    if (form.location_index < 10) {
+      index = "00" + form.location_index;
+    } else if (form.location_index < 100) {
+      index = "0" + form.location_index;
+    } else {
+      index = form.location_index;
+    }
+    const location = {
+      location_code: form.location_symbol + index
+    }
+    this.ls.addLocation(location).subscribe((data) => {
+      this.ls.getAllLocations().subscribe((locations) => {
+        this.locations = locations;
+        this.addLocationForm.reset();
+      })
+    })
   }
 
 }
