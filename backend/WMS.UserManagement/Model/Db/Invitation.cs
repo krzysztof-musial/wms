@@ -14,7 +14,6 @@ namespace WMS.UserManagement.Model.Db
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         [Column("invitation_user_id")]
-        [JsonIgnore]
         public User User { get; set; }
         public int WarehouseId { get; set; }
         [ForeignKey("WarehouseId")]

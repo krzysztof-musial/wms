@@ -9,7 +9,7 @@ namespace WMS.UserManagement.Model.Db
     public class Product
     {
         [Column("product_id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Column("warehouse_id")]
         [Required]
         public Warehouse Warehouse { get; set; }

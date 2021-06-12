@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WMS.UserManagement.DTO;
@@ -41,17 +42,31 @@ namespace WMS.UserManagement.Model.Services
             bool isUserIsOwnerOfWarehouse = _dbContext.Warehouses.Any(x => x.UserId == assignUserToWarehouse.UserId);
             if (isUserIsOwnerOfWarehouse)
             {
-                var response = WarehouseResponse.GetUserIsAlreadyOwnerOfAnotherWarehouse();
+                var response = WarehouseResponse.GetUserIsAlreadyOwnerOfAnotherWarehouseResponse();
+                return response;
+            }
+
+            bool isUserAlreadyAssignedToWarehouse = _dbContext.Users.Any(x => x.Id == assignUserToWarehouse.UserId && x.WarehouseId != null);
+            if (isUserAlreadyAssignedToWarehouse)
+            {
+                var response = WarehouseResponse.GetUserIsAlreadyAssignedToAnotherWarehouseResponse();
                 return response;
             }
             Db.Warehouse warehouse = _dbContext.Warehouses.FirstOrDefault(x => x.UserId == initiatingUserId);
+
+            if(warehouse == null)
+            {
+                var response = WarehouseResponse.GetUserIsNotOwnerOfAnyWarehouseResponse();
+                return response;
+            }
+
             user.WarehouseId = warehouse.Id;
             var operationResponse = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
             AssignUserToWarehouseResult assignUserToWarehouseResult = new AssignUserToWarehouseResult
             {
                 UserId = assignUserToWarehouse.UserId,
-                WarehouseId = warehouse.UserId
+                WarehouseId = (int)warehouse.UserId
 
             };
             SuccessResponse<AssignUserToWarehouseResult> successResponse = new SuccessResponse<AssignUserToWarehouseResult>(assignUserToWarehouseResult);
@@ -76,7 +91,7 @@ namespace WMS.UserManagement.Model.Services
 
                     var jwtToken = GenerateJwtString(user, warehouse);
 
-                    RefreshToken refreshToken = CreateRefreshToken();
+                    RefreshToken refreshToken = await CreateRefreshToken(user);
                     LoginResult loginResult = new LoginResult
                     {
                         Token = jwtToken,
@@ -93,17 +108,17 @@ namespace WMS.UserManagement.Model.Services
 
         public async Task<IResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest)
         {
-            var principal = GetUserDetailsFromAccessToken(refreshTokenRequest.AcessToken);
-            var username = principal.Identity.Name;
+            var claims = GetUserDetailsFromAccessToken(refreshTokenRequest.AccessToken);
+            var userEmail = claims.FirstOrDefault(x => x.Type == "userEmail").Value;
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(userEmail);
 
             if (user == null)
             {
                 return UserResponse.GetUserNotFoundErrorResponse();
             }
 
-            RefreshToken refreshToken = user.RefreshToken.FirstOrDefault(x => x.Token == refreshTokenRequest.RefreshToken);
+            RefreshToken refreshToken = _dbContext.RefreshTokens.FirstOrDefault(x => x.Token == refreshTokenRequest.RefreshToken);
 
             if(refreshToken == null)
             {
@@ -118,7 +133,7 @@ namespace WMS.UserManagement.Model.Services
 
             var warehouse = _dbContext.Users.Where(x => x.Id == user.Id).Include(x => x.Warehouse).FirstOrDefault().Warehouse;
 
-            var newRefreshToken = CreateRefreshToken();
+            var newRefreshToken = await CreateRefreshToken(user);
             string newAccessToken = GenerateJwtString(user, warehouse);
             var result = new LoginResult
             {
@@ -127,6 +142,40 @@ namespace WMS.UserManagement.Model.Services
             };
             SuccessResponse<LoginResult> response = new SuccessResponse<LoginResult>(result);
             return response;
+        }
+
+        public async Task<IResponse> IsTokenValid(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var validationParameters = GetTokenValidationParameters();
+
+                SecurityToken validatedToken;
+                IPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                var userDetails = GetUserDetailsFromAccessToken(token);
+
+                var claims = GetUserDetailsFromAccessToken(token);
+                var userEmail = claims.FirstOrDefault(x => x.Type == "userEmail").Value;
+
+                var user = await _userManager.FindByNameAsync(userEmail);
+
+
+                TokenValdiationResponse tokenValdiationResponse = new TokenValdiationResponse
+                {
+                    IsValid = true,
+                    User = user
+                };
+
+                SuccessResponse<TokenValdiationResponse> successResponse = new SuccessResponse<TokenValdiationResponse>(tokenValdiationResponse);
+                return successResponse;
+            }
+            catch (Exception error)
+            {
+                var response = TokenResponse.GetAccessTokenIsNotValidResponse(error.Message);
+                return response;
+            }
+            
         }
 
         public async Task<IResponse> Register(Registration registration)
@@ -195,23 +244,23 @@ namespace WMS.UserManagement.Model.Services
         }
 
         
-        public async Task<IResponse> RevokeToken(RevokeTokenRequest revokeTokenRequest)
+        public async Task<IResponse> RevokeToken(RevokeTokenRequest revokeTokenRequest, int userId)
         {
-            var userClaims = GetUserDetailsFromAccessToken(revokeTokenRequest.Token);
-            if(userClaims == null)
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+
+            if(user == null)
             {
                 var response = TokenResponse.GetAccessTokenIsNotValidResponse();
                 return response;
             }
 
-            var user = await _userManager.FindByNameAsync(userClaims.Identity.Name);
-            var refreshtoken = user.RefreshToken.FirstOrDefault(x => x.Token == revokeTokenRequest.Token);
+            var refreshtoken = _dbContext.RefreshTokens.FirstOrDefault(x => x.Token == revokeTokenRequest.Token && x.UserId == userId);
 
             if(refreshtoken != null)
             {
                 refreshtoken.Revoked = DateTime.UtcNow;
                 _dbContext.Update(refreshtoken);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
 
                 RevokeTokenResult revokeTokenResult = new RevokeTokenResult()
                 {
@@ -232,44 +281,47 @@ namespace WMS.UserManagement.Model.Services
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]));
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityTokenDescriptor tokenDescriptor = TokenDescriptor.GetTokenDescriptor(user, warehouse, symmetricSecurityKey);
-
+            var claims = new ClaimsIdentity(new[]
+            {
+                new Claim("userId", user.Id.ToString()),
+                new Claim("userEmail", user.Email),
+                new Claim("userFirstName", user.FirstName),
+                            new Claim("userLastName", user.LastName),
+                            new Claim("warehouseId", warehouse == null ? "" : warehouse.Id.ToString())
+            });
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = new JwtSecurityToken(
+            var token = tokenHandler.CreateJwtSecurityToken(
                 issuer: _configuration["Authentication:ValidIssuer"],
                 audience: _configuration["Authentication:ValidAudience"],
                 expires: DateTime.Now.AddHours(3),
-                signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            return tokenHandler.WriteToken(token);
+                signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256),
+                subject: new ClaimsIdentity(user.Email)
+            ) ;
+            return tokenHandler.WriteToken(stoken);
         }
 
-        private RefreshToken CreateRefreshToken()
+        private async Task<RefreshToken> CreateRefreshToken(User user)
         {
             using (var cryptoServiceProvider = new RNGCryptoServiceProvider())
             {
                 var bytes = new byte[64];
                 cryptoServiceProvider.GetBytes(bytes);
-                return new RefreshToken()
+                var refreshToken = new RefreshToken()
                 {
                     Token = Convert.ToBase64String(bytes),
                     Expires = DateTime.UtcNow.AddDays(7),
-                    Created = DateTime.UtcNow
+                    Created = DateTime.UtcNow,
+                    User = user 
                 };
+                var t = _dbContext.RefreshTokens.Add(refreshToken);
+                var t1 = await _dbContext.SaveChangesAsync();
+                return refreshToken;
             }
         }
         
-        private ClaimsPrincipal GetUserDetailsFromAccessToken(string token)
+        private IEnumerable<Claim> GetUserDetailsFromAccessToken(string token)
         {
-            var tokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateAudience = true,
-                ValidAudience = _configuration["Authentication:ValidAudience"],
-                ValidateIssuer = true,
-                ValidIssuer = _configuration["Authentication:ValidIssuer"],
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]))
-            };
+            var tokenValidationParameters = GetTokenValidationParameters();
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -280,7 +332,18 @@ namespace WMS.UserManagement.Model.Services
             if (securityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 return null;
 
-            return principal;
+            return principal.Claims;
+        }
+
+        private TokenValidationParameters GetTokenValidationParameters()
+        {
+            var tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]))
+            };
+            return tokenValidationParameters;
         }
     }
 }

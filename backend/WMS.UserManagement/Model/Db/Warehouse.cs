@@ -21,7 +21,7 @@ namespace WMS.UserManagement.Model.Db
         public DateTime ModifiedOn { get; }
 
         [Column("warehouse_user_id")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         [JsonIgnore]
         public User CreatedBy { get; set; }
     }

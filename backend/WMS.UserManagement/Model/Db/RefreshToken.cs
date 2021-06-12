@@ -25,6 +25,9 @@ namespace WMS.UserManagement.Model.Db
         public string ReplacedByToken { get; set; }
         [Column("refresh_token_revoked")]
         public DateTime? Revoked { get; set; }
-        public bool IsActive => Revoked == null && !IsExpired; 
+        public bool IsActive => Revoked == null && !IsExpired;
+        [Column("UserId")]
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using WMS.UserManagement.Model.Warehouse;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
 using WMS.UserManagement.Model.Services;
+using System.Linq;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -20,8 +21,8 @@ namespace WMS.UserManagement.Controllers
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<User> _userManager;
         private readonly WarehouseManagementSystemDataContext _dbContext;
+        private readonly UserManager<User> _userManager;
         private readonly IEmailConfiguration _emailConfiguration;
         private IUserService _userService;
 
@@ -94,11 +95,23 @@ namespace WMS.UserManagement.Controllers
             return BadRequest(response);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("RevokeToken")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest revokeTokenRequest)
         {
-            var response = await _userService.RevokeToken(revokeTokenRequest);
+            var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value);
+            var response = await _userService.RevokeToken(revokeTokenRequest, userId);
+
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [HttpPost("ValidateToken")]
+        public async Task<IActionResult> ValidateToken([FromBody] RevokeTokenRequest revokeTokenRequest)
+        {
+            var response = await _userService.IsTokenValid(revokeTokenRequest.Token);
 
             if (response.Success)
                 return Ok(response);
@@ -116,13 +129,6 @@ namespace WMS.UserManagement.Controllers
             {
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             }
-        }
-
-        [Authorize]
-        [HttpPost("RevokeToken")]
-        public bool RevokeToken(string token, string ipAddress)
-        {
-            throw new NotImplementedException();
         }
     }
 }

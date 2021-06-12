@@ -3,27 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WMS.UserManagement.Migrations
 {
-    public partial class InitalMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "company",
-                columns: table => new
-                {
-                    company_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    company_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    column_tin = table.Column<int>(type: "int", nullable: false),
-                    company_street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    company_country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    company_postal_code = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_company", x => x.company_id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "log",
                 columns: table => new
@@ -68,26 +51,6 @@ namespace WMS.UserManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "order",
-                columns: table => new
-                {
-                    order_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: true),
-                    order_name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_order", x => x.order_id);
-                    table.ForeignKey(
-                        name: "FK_order_company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "company",
-                        principalColumn: "company_id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "roleclaim",
                 columns: table => new
                 {
@@ -109,10 +72,25 @@ namespace WMS.UserManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "order",
+                columns: table => new
+                {
+                    order_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    order_name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_order", x => x.order_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "product",
                 columns: table => new
                 {
-                    product_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    product_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     WarehouseId = table.Column<int>(type: "int", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
                     UnitOfMessureId = table.Column<int>(type: "int", nullable: true),
@@ -123,12 +101,6 @@ namespace WMS.UserManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_product", x => x.product_id);
-                    table.ForeignKey(
-                        name: "FK_product_company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "company",
-                        principalColumn: "company_id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_product_uom_UnitOfMessureId",
                         column: x => x.UnitOfMessureId,
@@ -144,7 +116,7 @@ namespace WMS.UserManagement.Migrations
                     order_line_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
                     order_line_quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -170,7 +142,7 @@ namespace WMS.UserManagement.Migrations
                 {
                     article_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
                     LocationId = table.Column<int>(type: "int", nullable: true),
                     article_quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
@@ -201,6 +173,39 @@ namespace WMS.UserManagement.Migrations
                         principalTable: "role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "invitation",
+                columns: table => new
+                {
+                    invitation_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    invitation_state = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_invitation", x => x.invitation_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refresh_token",
+                columns: table => new
+                {
+                    refresh_token_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    refresh_token_tokencontent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    refresh_token_created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    refresh_token_expires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    refresh_token_replaced_by_token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    refresh_token_revoked = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refresh_token", x => x.refresh_token_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,11 +258,35 @@ namespace WMS.UserManagement.Migrations
                     warehouse_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     warehouse_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    warehouse_user_id = table.Column<int>(type: "int", nullable: false)
+                    warehouse_user_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_warehouse", x => x.warehouse_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "company",
+                columns: table => new
+                {
+                    company_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    column_tin = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
+                    company_street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    company_country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    company_postal_code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    company_warehouse_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_company", x => x.company_id);
+                    table.ForeignKey(
+                        name: "FK_company_warehouse_company_warehouse_id",
+                        column: x => x.company_warehouse_id,
+                        principalTable: "warehouse",
+                        principalColumn: "warehouse_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -289,13 +318,14 @@ namespace WMS.UserManagement.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WarehouseId = table.Column<int>(type: "int", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
@@ -324,6 +354,21 @@ namespace WMS.UserManagement.Migrations
                 name: "IX_article_ProductId",
                 table: "article",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_company_company_warehouse_id",
+                table: "company",
+                column: "company_warehouse_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invitation_UserId",
+                table: "invitation",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invitation_WarehouseId",
+                table: "invitation",
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_location_WarehouseId",
@@ -361,6 +406,11 @@ namespace WMS.UserManagement.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_refresh_token_UserId",
+                table: "refresh_token",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "role",
                 column: "NormalizedName",
@@ -380,9 +430,7 @@ namespace WMS.UserManagement.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_user_WarehouseId",
                 table: "user",
-                column: "WarehouseId",
-                unique: true,
-                filter: "[WarehouseId] IS NOT NULL");
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -410,7 +458,24 @@ namespace WMS.UserManagement.Migrations
                 name: "IX_warehouse_warehouse_user_id",
                 table: "warehouse",
                 column: "warehouse_user_id",
-                unique: true);
+                unique: true,
+                filter: "[warehouse_user_id] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_order_company_CompanyId",
+                table: "order",
+                column: "CompanyId",
+                principalTable: "company",
+                principalColumn: "company_id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_product_company_CompanyId",
+                table: "product",
+                column: "CompanyId",
+                principalTable: "company",
+                principalColumn: "company_id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_product_warehouse_WarehouseId",
@@ -431,6 +496,30 @@ namespace WMS.UserManagement.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_userrole_user_UserId",
                 table: "userrole",
+                column: "UserId",
+                principalTable: "user",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_invitation_user_UserId",
+                table: "invitation",
+                column: "UserId",
+                principalTable: "user",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_invitation_warehouse_WarehouseId",
+                table: "invitation",
+                column: "WarehouseId",
+                principalTable: "warehouse",
+                principalColumn: "warehouse_id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_refresh_token_user_UserId",
+                table: "refresh_token",
                 column: "UserId",
                 principalTable: "user",
                 principalColumn: "Id",
@@ -466,7 +555,7 @@ namespace WMS.UserManagement.Migrations
                 column: "warehouse_user_id",
                 principalTable: "user",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -479,10 +568,16 @@ namespace WMS.UserManagement.Migrations
                 name: "article");
 
             migrationBuilder.DropTable(
+                name: "invitation");
+
+            migrationBuilder.DropTable(
                 name: "log");
 
             migrationBuilder.DropTable(
                 name: "order_line");
+
+            migrationBuilder.DropTable(
+                name: "refresh_token");
 
             migrationBuilder.DropTable(
                 name: "roleclaim");

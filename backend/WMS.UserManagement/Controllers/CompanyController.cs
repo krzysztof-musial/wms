@@ -29,7 +29,8 @@ namespace WMS.UserManagement.Controllers
         [HttpGet]
         public async Task<ActionResult> GetWarehouseCompanies()
         {
-            var companies = await _dbContext.Companies.ToListAsync();
+            int warehouseId = GetUserWarehouseId();
+            var companies = await _dbContext.Companies.Where(x => x.WarehouseId == warehouseId).ToListAsync();
             SuccessResponse<List<Company>> successResponse = new SuccessResponse<List<Company>>(companies);
             return Ok(successResponse);
         }
@@ -56,10 +57,18 @@ namespace WMS.UserManagement.Controllers
                 FailedResponse failedResponse = CompanyResponse.GetCompanyWithProvidedTinAlreadyExistsResponse();
                 return BadRequest(failedResponse);
             }
+
+            int warehouseId = GetUserWarehouseId();
+            company.WarehouseId = warehouseId;
             _dbContext.Companies.Add(company);
             await _dbContext.SaveChangesAsync();
             SuccessResponse<Company> successResponse = new SuccessResponse<Company>(company);
             return Ok(successResponse);
+        }
+
+        private int GetUserWarehouseId()
+        {
+            return int.Parse(User.Claims.FirstOrDefault(x => x.Type == "warehouseId").Value);
         }
     }
 }

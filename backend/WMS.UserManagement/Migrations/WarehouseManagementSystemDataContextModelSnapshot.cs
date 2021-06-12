@@ -131,8 +131,8 @@ namespace WMS.UserManagement.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)")
@@ -175,11 +175,17 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("company_street");
 
-                    b.Property<int>("Tin")
-                        .HasColumnType("int")
+                    b.Property<decimal>("Tin")
+                        .HasColumnType("decimal(20,0)")
                         .HasColumnName("column_tin");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int")
+                        .HasColumnName("company_warehouse_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("company");
                 });
@@ -197,12 +203,10 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnName("invitation_state");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("invitation_user_id");
+                        .HasColumnType("int");
 
                     b.Property<int>("WarehouseId")
-                        .HasColumnType("int")
-                        .HasColumnName("invitation_warehouse_id");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -295,8 +299,8 @@ namespace WMS.UserManagement.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)")
@@ -313,9 +317,11 @@ namespace WMS.UserManagement.Migrations
 
             modelBuilder.Entity("WMS.UserManagement.Model.Db.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("product_id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("product_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -349,6 +355,46 @@ namespace WMS.UserManagement.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("product");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("refresh_token_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_created");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_expires");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("refresh_token_replaced_by_token");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_revoked");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("refresh_token_tokencontent");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refresh_token");
                 });
 
             modelBuilder.Entity("WMS.UserManagement.Model.Db.Role", b =>
@@ -447,6 +493,9 @@ namespace WMS.UserManagement.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -488,14 +537,15 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("warehouse_name");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("warehouse_user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[warehouse_user_id] IS NOT NULL");
 
                     b.ToTable("warehouse");
                 });
@@ -564,6 +614,17 @@ namespace WMS.UserManagement.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Company", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("WMS.UserManagement.Model.Db.Invitation", b =>
@@ -639,6 +700,17 @@ namespace WMS.UserManagement.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.RefreshToken", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.Db.User", "User")
+                        .WithMany("RefreshToken")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WMS.UserManagement.Model.Db.User", b =>
                 {
                     b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
@@ -652,11 +724,14 @@ namespace WMS.UserManagement.Migrations
                 {
                     b.HasOne("WMS.UserManagement.Model.Db.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.User", b =>
+                {
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }

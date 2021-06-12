@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +15,7 @@ namespace WMS.UserManagement.Model.Db
         public string Name { get; set; }
         [Column("column_tin")]
         [Required]
-        public int Tin { get; set; }
+        public ulong Tin { get; set; }
         [Column("company_street")]
         [Required]
         public string Street { get; set; }
@@ -29,5 +30,9 @@ namespace WMS.UserManagement.Model.Db
         public DateTime CreatedOn { get; }
         [Column("company_modified_on")]
         public DateTime ModifiedOn { get; }
+        [Column("company_warehouse_id")]
+        [Required]
+        public int WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
     }
 }

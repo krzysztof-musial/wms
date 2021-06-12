@@ -19,5 +19,10 @@
             var response = new FailedResponse("Provided access token is not valid");
             return response;
         }
+        public static FailedResponse GetAccessTokenIsNotValidResponse(string message)
+        {
+            var response = new FailedResponse(message);
+            return response;
+        }
     }
 }

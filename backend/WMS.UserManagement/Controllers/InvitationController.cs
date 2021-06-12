@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Common.Enums;
@@ -24,6 +28,24 @@ namespace WMS.UserManagement.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetWarehouseInvitation()
+        {
+            int warehouseId = GetUserWarehouseId();
+            var invitations = await _dbContext.Invitations.Where(x => x.WarehouseId == warehouseId).Include(x => x.User).ToListAsync();
+            var response = new SuccessResponse<List<Invitation>>(invitations);
+            return Ok(response);
+        }
+
+        [HttpGet("GetAllWarehouseActiveInvitations")]
+        public async Task<ActionResult> GetAllWarehouseActiveInvitations()
+        {
+            int warehouseId = GetUserWarehouseId();
+            var invitations = await _dbContext.Invitations.Where(x => x.WarehouseId == warehouseId && x.State == State.New).Include(x => x.User).ToListAsync();
+            var response = new SuccessResponse<List<Invitation>>(invitations);
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddInvitation([FromBody] Invitation invitation)
         {
@@ -38,17 +60,26 @@ namespace WMS.UserManagement.Controllers
         [HttpPost("ApproveInvitation")]
         public async Task<ActionResult> ApproveInvitation(SetInvitationStatus setInvitationStatus)
         {
-            Invitation invitation = await _dbContext.Invitations.FindAsync(setInvitationStatus.Id);
-            IResponse response = await SetInvitationStatus(invitation, State.Approved);
-            if (!response.Success)
+
+            try
+            {
+                Invitation invitation = await _dbContext.Invitations.FindAsync(setInvitationStatus.Id);
+                IResponse response = await SetInvitationStatus(invitation, State.Approved);
+                if (!response.Success)
+                    return BadRequest(response);
+
+
+                Model.Db.User user = await _userManager.FindByIdAsync(invitation.UserId.ToString());
+                user.WarehouseId = invitation.WarehouseId;
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                FailedResponse response = new FailedResponse(ex.ToString());
                 return BadRequest(response);
-
-
-            Model.Db.User user = await _userManager.FindByIdAsync(invitation.UserId.ToString());
-            user.WarehouseId = invitation.WarehouseId;
-            _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-            return Ok(response);
+            }
         }
 
         [HttpPost("DeclineInvitation")]
@@ -70,11 +101,16 @@ namespace WMS.UserManagement.Controllers
             }
             invitation.State = state;
 
-            var t = _dbContext.Invitations.Update(invitation);
+            _dbContext.Invitations.Update(invitation);
             await _dbContext.SaveChangesAsync();
 
             SuccessResponse<Invitation> successResponse = new SuccessResponse<Invitation>(invitation);
             return successResponse;
+        }
+
+        private int GetUserWarehouseId()
+        {
+            return int.Parse(User.Claims.FirstOrDefault(x => x.Type == "warehouseId").Value);
         }
     }
 }

@@ -10,8 +10,8 @@ using WMS.UserManagement.DTO;
 namespace WMS.UserManagement.Migrations
 {
     [DbContext(typeof(WarehouseManagementSystemDataContext))]
-    [Migration("20210428125602_InitalMigration")]
-    partial class InitalMigration
+    [Migration("20210610213120_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,7 +122,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("usertoken");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Article", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Article", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -133,8 +133,8 @@ namespace WMS.UserManagement.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)")
@@ -149,7 +149,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("article");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Company", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Company", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,16 +177,49 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("company_street");
 
-                    b.Property<int>("Tin")
-                        .HasColumnType("int")
+                    b.Property<decimal>("Tin")
+                        .HasColumnType("decimal(20,0)")
                         .HasColumnName("column_tin");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int")
+                        .HasColumnName("company_warehouse_id");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("company");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Location", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("invitation_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("State")
+                        .HasColumnType("int")
+                        .HasColumnName("invitation_state");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("invitation");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,7 +242,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("location");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Log", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Log", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,7 +268,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("log");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Order", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -257,7 +290,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("order");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.OrderLine", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.OrderLine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,8 +301,8 @@ namespace WMS.UserManagement.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)")
@@ -284,11 +317,13 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("order_line");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Product", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("product_id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("product_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -324,7 +359,47 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("product");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Role", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("refresh_token_id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_created");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_expires");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("refresh_token_replaced_by_token");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_revoked");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("refresh_token_tokencontent");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refresh_token");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -353,7 +428,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("role");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.UnitOfMessure", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.UnitOfMessure", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,7 +445,7 @@ namespace WMS.UserManagement.Migrations
                     b.ToTable("uom");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.User", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -420,6 +495,9 @@ namespace WMS.UserManagement.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -443,14 +521,12 @@ namespace WMS.UserManagement.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("WarehouseId")
-                        .IsUnique()
-                        .HasFilter("[WarehouseId] IS NOT NULL");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("user");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Warehouse", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Warehouse", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -463,21 +539,22 @@ namespace WMS.UserManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("warehouse_name");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("warehouse_user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[warehouse_user_id] IS NOT NULL");
 
                     b.ToTable("warehouse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Role", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -486,7 +563,7 @@ namespace WMS.UserManagement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.User", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -495,7 +572,7 @@ namespace WMS.UserManagement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.User", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -504,13 +581,13 @@ namespace WMS.UserManagement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Role", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WMS.UserManagement.Model.User", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -519,20 +596,20 @@ namespace WMS.UserManagement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.User", null)
+                    b.HasOne("WMS.UserManagement.Model.Db.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Article", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Article", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Location", "Location")
+                    b.HasOne("WMS.UserManagement.Model.Db.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("WMS.UserManagement.Model.Product", "Product")
+                    b.HasOne("WMS.UserManagement.Model.Db.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
@@ -541,31 +618,61 @@ namespace WMS.UserManagement.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Location", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Company", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Warehouse", "Warehouse")
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Invitation", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.Db.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Location", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId");
 
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Order", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Order", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Company", "Company")
+                    b.HasOne("WMS.UserManagement.Model.Db.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.OrderLine", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.OrderLine", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Order", "Order")
+                    b.HasOne("WMS.UserManagement.Model.Db.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("WMS.UserManagement.Model.Product", "Product")
+                    b.HasOne("WMS.UserManagement.Model.Db.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
@@ -574,17 +681,17 @@ namespace WMS.UserManagement.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Product", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Product", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Company", "Company")
+                    b.HasOne("WMS.UserManagement.Model.Db.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("WMS.UserManagement.Model.UnitOfMessure", "UnitOfMessure")
+                    b.HasOne("WMS.UserManagement.Model.Db.UnitOfMessure", "UnitOfMessure")
                         .WithMany()
                         .HasForeignKey("UnitOfMessureId");
 
-                    b.HasOne("WMS.UserManagement.Model.Warehouse", "Warehouse")
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId");
 
@@ -595,24 +702,38 @@ namespace WMS.UserManagement.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.User", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.RefreshToken", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.Warehouse", "Warehouse")
+                    b.HasOne("WMS.UserManagement.Model.Db.User", "User")
+                        .WithMany("RefreshToken")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.User", b =>
+                {
+                    b.HasOne("WMS.UserManagement.Model.Db.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId");
 
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("WMS.UserManagement.Model.Warehouse", b =>
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.Warehouse", b =>
                 {
-                    b.HasOne("WMS.UserManagement.Model.User", "CreatedBy")
+                    b.HasOne("WMS.UserManagement.Model.Db.User", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("WMS.UserManagement.Model.Db.User", b =>
+                {
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }
