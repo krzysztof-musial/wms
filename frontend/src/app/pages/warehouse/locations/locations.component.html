@@ -1,0 +1,45 @@
+<div class="max-w-screen-lg m-auto">
+    <!-- Tables -->
+    <div class="flex flex-col space-y-2 mb-8">
+        <h1 class="text-2xl font-semibold">Locations</h1>
+        <p class="text-wms-100">Here you can manage your location places.</p>
+    </div>
+    <div class="mb-8">
+        <form [formGroup]="addLocationForm" (ngSubmit)="addLocation(addLocationForm.value)" class="flex space-x-4 items-center">
+            <!-- <input type="text" placeholder="Location code" formControlName="location_code" class="wms-input-app bg-wms-400"> -->
+            <select class="wms-input-app bg-wms-400" formControlName="location_symbol">
+                <option value="" disabled selected hidden>Location symbol</option>
+                <option value="W">W - Warehouse</option>
+                <option value="B">B - Bufor</option>
+                <option value="E">E - Export</option>
+                <option value="I">I - Import</option>
+            </select>
+            <input type="number" class="wms-input-app bg-wms-400" min="1" max="100" value="1" formControlName="location_index" placeholder="Location index">
+            <input class="wms-submit-app" type="submit" value="Add" [disabled]="!addLocationForm.valid">
+        </form>
+    </div>
+    <div class="max-w-screen-lg overflow-x-auto">
+        <table class="w-full whitespace-nowrap">
+            <!-- HEAD -->
+            <tr class="text-left text-wms-200 text-xs uppercase">
+                <th class="bg-wms-400 px-4 py-2 font-medium border-l border-t border-b border-wms-300">
+                    #
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Code
+                </th>
+                <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
+                    •••
+                </th>
+            </tr>
+            <!-- Locations -->
+            <tr *ngFor="let location of locations; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+                <td class="px-4 py-4">{{ location.location_id }}</td>
+                <td class="px-4 py-4">{{ location.location_code }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</div>

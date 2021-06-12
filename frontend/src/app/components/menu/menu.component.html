@@ -1,0 +1,62 @@
+<div class="w-full h-screen overflow-y-auto flex flex-col justify-between p-4 bg-wms-500 border-r border-wms-400 text-white">
+    <div class="flex flex-col" [class.space-y-4]="size === 'small'" [class.space-y-8]="size === 'big' || mobile === true">
+        <div class="flex justify-between items-center">
+            <div class="p-4 cursor-pointer" [routerLink]="['/warehouse']" *ngIf="size === 'big' || mobile === true">
+                <app-svg [src]="'logo'" [primary]="'#5CFFFF'" [secondary]="'white'"></app-svg>
+            </div>
+            <div class="p-4 cursor-pointer" [routerLink]="['/warehouse']" *ngIf="size === 'small'">
+                <app-svg [src]="'logo-icon'" [primary]="'#5CFFFF'" [size]="24"></app-svg>
+            </div>
+            <ng-content select="burger"></ng-content>
+        </div>
+        <ul>
+            <li class="text-sm font-medium text-wms-200 mb-4 px-4" [class.hidden]="size === 'small'">Overview</li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse']" routerLinkActive="wms-active" [routerLinkActiveOptions]="{exact:true}">
+                <app-svg *ngIf="router.url != '/warehouse'" [src]="'dashboard'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse'" [src]="'dashboard-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Dashboard</span>
+            </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/settings']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/settings'" [src]="'settings'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/settings'" [src]="'settings-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Settings</span>
+            </li>
+        </ul>
+        <ul>
+            <li class="text-sm font-medium text-wms-200 mb-4 px-4" [class.hidden]="size === 'small'">Warehouse</li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/workers']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/workers'" [src]="'workers'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/workers'" [src]="'workers-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Workers</span>
+            </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/storage']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/storage'" [src]="'folder'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/storage'" [src]="'folder-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Storage</span>
+            </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/locations']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/locations'" [src]="'storage'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/locations'" [src]="'storage-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Locations</span>
+            </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/products']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/products'" [src]="'products'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/products'" [src]="'products-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Products</span>
+            </li>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" [routerLink]="['/warehouse/actions']" routerLinkActive="wms-active">
+                <app-svg *ngIf="router.url != '/warehouse/actions'" [src]="'actions'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <app-svg *ngIf="router.url == '/warehouse/actions'" [src]="'actions-fill'" [primary]="'white'"></app-svg>
+                <span [class.hidden]="size === 'small'">Actions</span>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <ul>
+            <li class="px-4 py-3 flex items-center space-x-4 text-wms-200 font-medium text-sm rounded-lg cursor-pointer" [class.pr-24]="size === 'big' || mobile === true" (click)="logout()">
+                <app-svg [src]="'logout'" [primary]="'white'" [secondary]="'#717173'"></app-svg>
+                <span [class.hidden]="size === 'small'">Logout</span>
+            </li>
+        </ul>
+    </div>
+</div>

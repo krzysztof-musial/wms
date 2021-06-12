@@ -1,0 +1,14 @@
+<div class="min-h-screen p-4 flex justify-center items-center bg-white sm:bg-gray-50">
+    <div @slideInOut class="p-4 flex flex-col items-center bg-white w-full max-w-sm sm:border sm:border-gray-200 sm:p-12 sm:rounded-lg sm:shadow-xl">
+        <div [routerLink]="['/']" class="cursor-pointer">
+            <app-svg [src]="'logo'" [primary]="'#0266d6'" [secondary]="'black'"></app-svg>
+        </div>
+        <h1 class="my-8 text-xl font-semibold">Login to your account</h1>
+        <form class="flex flex-col items-center space-y-4 w-full" [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <input type="email" class="wms-input" placeholder="Email" formControlName="email">
+            <input type="password" class="wms-input" placeholder="Password" formControlName="password">
+            <input type="submit" class="wms-submit w-full" value="Login" [disabled]="!loginForm.valid">
+            <a href="" class="text-sm text-blue-600 font-medium">• Forgot password?</a>
+        </form>
+    </div>
+</div>

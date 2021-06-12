@@ -1,0 +1,39 @@
+<div class="max-w-screen-lg m-auto">
+    <!-- Tables -->
+    <div class="flex flex-col space-y-2 mb-8">
+        <h1 class="text-2xl font-semibold">Storage</h1>
+        <p class="text-wms-100">Here you can manage your storage.<br>This is the list of locations that contains products.<br>You can add, remove or transfer products between locations in the <span [routerLink]="['/warehouse/actions']" class="font-medium text-wms-accent cursor-pointer hover:underline">Actions</span> tab.</p>
+    </div>
+    <div class="max-w-screen-lg overflow-x-auto">
+        <table class="w-full whitespace-nowrap">
+            <!-- HEAD -->
+            <tr class="text-left text-wms-200 text-xs uppercase">
+                <th class="bg-wms-400 px-4 py-2 font-medium border-l border-t border-b border-wms-300">
+                    #
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Location
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Product
+                </th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300">
+                    Amount
+                </th>
+                <th class="w-full bg-wms-400 px-4 py-2 font-medium border-t border-b border-wms-300"></th>
+                <th class="bg-wms-400 px-4 py-2 font-medium border-r border-t border-b border-wms-300 text-right">
+                    •••
+                </th>
+            </tr>
+            <!-- Locations -->
+            <tr *ngFor="let article of articles; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
+                <td class="px-4 py-4">{{ article.article_id }}</td>
+                <td class="px-4 py-4"><span class="bg-white rounded px-2 py-1 uppercase text-black text-xs font-semibold mr-2">{{ article.LocationId }}</span>{{ article.locationArticle.location_code }}</td>
+                <td class="px-4 py-4"><span class="bg-white rounded px-2 py-1 uppercase text-black text-xs font-semibold mr-2">{{ article.ProductId }}</span>{{ article.productArticle.product_name }}</td>
+                <td class="px-4 py-4">{{ article.article_quantity }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</div>
