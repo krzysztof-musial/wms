@@ -20,7 +20,6 @@ export class ImportComponent implements OnInit {
       amount: ['', [Validators.required] ],
       location: ['', [Validators.required] ]
     });
-    console.log(this.importForm)
     this.ls.getAllLocations().subscribe((locations) => {
       this.locations = locations;
     })
