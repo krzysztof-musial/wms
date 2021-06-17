@@ -59,7 +59,7 @@ export class AuthService {
         // console.log(response);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken.token);
-        this.router.navigate(['/warehouse']);
+        // this.router.navigate(['/warehouse']);
       },
       error: error => {
         console.error('There was an error!', error);

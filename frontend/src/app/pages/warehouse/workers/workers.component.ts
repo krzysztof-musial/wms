@@ -70,8 +70,8 @@ export class WorkersComponent implements OnInit {
       this.ws.warehouseMembers().subscribe((data) => {
         this.workers = data;
         this.counter();
-        this.user = this.auth.decodeToken();
-        console.log(this.user)
+        this.auth.refreshToken();
+        // this.user = this.auth.decodeToken();
       })
     });
   }
