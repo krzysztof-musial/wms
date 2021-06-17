@@ -62,4 +62,8 @@ export class WarehouseService {
     return this.http.post<any>(this.url + '/invitation/declineinvitation/', candidate);
   }
 
+  changeRole(worker: any) {
+    return this.http.post(this.url + '/role/AssignRole', worker);
+  }
+
 }

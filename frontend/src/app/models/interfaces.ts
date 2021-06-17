@@ -14,5 +14,5 @@ export interface IToken {
     userLastName: string,
     userEmail: string,
     warehouseId: string,
-    roleId: string
+    role: string
 }
