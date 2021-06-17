@@ -21,7 +21,6 @@ export class WorkersComponent implements OnInit {
 
   constructor(private ws: WarehouseService, private auth: AuthService, private fb: FormBuilder) {
     this.user = this.auth.decodeToken();
-    console.log(this.user)
     this.changeRoleForm = this.fb.group({
       role: ['', [Validators.required] ]
     });
