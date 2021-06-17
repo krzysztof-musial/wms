@@ -9,6 +9,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SetupComponent } from './pages/setup/setup.component';
 import { ActionsComponent } from './pages/warehouse/actions/actions.component';
+import { ExportComponent } from './pages/warehouse/actions/export/export.component';
+import { ImportComponent } from './pages/warehouse/actions/import/import.component';
+import { SelectComponent } from './pages/warehouse/actions/select/select.component';
+import { TransferComponent } from './pages/warehouse/actions/transfer/transfer.component';
 import { DashboardComponent } from './pages/warehouse/dashboard/dashboard.component';
 import { LocationsComponent } from './pages/warehouse/locations/locations.component';
 import { ProductsComponent } from './pages/warehouse/products/products.component';
@@ -29,7 +33,12 @@ const routes: Routes = [
     {path: 'storage', component: StorageComponent},
     {path: 'locations', component: LocationsComponent},
     {path: 'products', component: ProductsComponent},
-    {path: 'actions', component: ActionsComponent},
+    {path: 'actions', component: ActionsComponent, children: [
+      {path: '', component: SelectComponent},
+      {path: 'import', component: ImportComponent},
+      {path: 'transfer', component: TransferComponent},
+      {path: 'export', component: ExportComponent}
+    ]},
   ]},
   {path: 'setup', component: SetupComponent, canActivate: [AuthGuard, NoWarehouseGuard]},
   // 404
