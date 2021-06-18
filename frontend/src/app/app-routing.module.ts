@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { HasRoleManagerGuard } from './guards/has-role-manager.guard';
 import { HasWarehouseGuard } from './guards/has-warehouse.guard';
 import { NoAuthGuard } from './guards/no-auth.guard';
 import { NoWarehouseGuard } from './guards/no-warehouse.guard';
@@ -35,9 +36,9 @@ const routes: Routes = [
     {path: 'products', component: ProductsComponent},
     {path: 'actions', component: ActionsComponent, children: [
       {path: '', component: SelectComponent},
-      {path: 'import', component: ImportComponent},
+      {path: 'import', component: ImportComponent, canActivate: [HasRoleManagerGuard]},
       {path: 'transfer', component: TransferComponent},
-      {path: 'export', component: ExportComponent}
+      {path: 'export', component: ExportComponent, canActivate: [HasRoleManagerGuard]}
     ]},
   ]},
   {path: 'setup', component: SetupComponent, canActivate: [AuthGuard, NoWarehouseGuard]},

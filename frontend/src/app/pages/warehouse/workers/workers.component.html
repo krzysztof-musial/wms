@@ -64,7 +64,7 @@
                     <span *ngIf="worker.role === 2" class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Owner</span>
                 </td>
                 <td></td>
-                <td class="px-4 py-2">
+                <td class="px-4 py-2 text-right">
                     <form *ngIf="user.role === 'Owner' && user.userId != worker.id" [formGroup]="changeRoleForm">
                         <select formControlName="role" class="pl-2 pr-8 py-1 rounded text-black  text-xs font-semibold uppercase" (change)="changeRole(worker.id, changeRoleForm.value)">
                             <option value="Owner" [selected]="worker.role === 2">Owner</option>
@@ -84,8 +84,8 @@
                 </td>
                 <td></td>
                 <td class="p-4 flex items-center space-x-2">
-                    <button class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="acceptCandidate(candidate.id)">Accept</button>
-                    <button class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="declineCandidate(candidate.id)">Decline</button>
+                    <button *ngIf="user.role === 'Owner'" class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="acceptCandidate(candidate.id)">Accept</button>
+                    <button *ngIf="user.role === 'Owner'" class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="declineCandidate(candidate.id)">Decline</button>
                 </td>
             </tr>
         </table>

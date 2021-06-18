@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-semibold">Locations</h1>
         <p class="text-wms-100">Here you can manage your location places.</p>
     </div>
-    <div class="mb-8">
+    <div *ngIf="user.role === 'Owner'" class="mb-8">
         <form [formGroup]="addLocationForm" (ngSubmit)="addLocation(addLocationForm.value)" class="flex space-x-4 items-center">
             <!-- <input type="text" placeholder="Location code" formControlName="location_code" class="wms-input-app bg-wms-400"> -->
             <select class="wms-input-app bg-wms-400" formControlName="location_symbol">

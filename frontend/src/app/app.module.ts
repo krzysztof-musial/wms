@@ -30,6 +30,7 @@ import { SelectComponent } from './pages/warehouse/actions/select/select.compone
 import { ImportComponent } from './pages/warehouse/actions/import/import.component';
 import { TransferComponent } from './pages/warehouse/actions/transfer/transfer.component';
 import { ExportComponent } from './pages/warehouse/actions/export/export.component';
+import { HasRoleOwnerGuard } from './guards/has-role-owner.guard';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,9 @@ import { ExportComponent } from './pages/warehouse/actions/export/export.compone
     AuthGuard,
     NoAuthGuard,
     HasWarehouseGuard,
-    NoWarehouseGuard
+    NoWarehouseGuard,
+    HasRoleOwnerGuard,
+    HasRoleOwnerGuard
   ],
   bootstrap: [AppComponent]
 })
