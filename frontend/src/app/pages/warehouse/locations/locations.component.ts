@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 import { LocationsService } from 'src/app/services/locations.service';
 
 @Component({
@@ -9,10 +10,12 @@ import { LocationsService } from 'src/app/services/locations.service';
 })
 export class LocationsComponent implements OnInit {
 
+  user;
   addLocationForm: FormGroup;
   locations;
 
-  constructor(private ls: LocationsService, private fb: FormBuilder) {
+  constructor(private ls: LocationsService, private fb: FormBuilder, private auth: AuthService) {
+    this.user = this.auth.decodeToken();
     this.ls.getAllLocations().subscribe((locations) => {
       this.locations = locations;
     })

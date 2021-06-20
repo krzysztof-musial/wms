@@ -26,6 +26,11 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HttpRequestInterceptor } from './interceptors/http-request.interceptor';
 import { MenuComponent } from './components/menu/menu.component';
 import { LocationsComponent } from './pages/warehouse/locations/locations.component';
+import { SelectComponent } from './pages/warehouse/actions/select/select.component';
+import { ImportComponent } from './pages/warehouse/actions/import/import.component';
+import { TransferComponent } from './pages/warehouse/actions/transfer/transfer.component';
+import { ExportComponent } from './pages/warehouse/actions/export/export.component';
+import { HasRoleOwnerGuard } from './guards/has-role-owner.guard';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,11 @@ import { LocationsComponent } from './pages/warehouse/locations/locations.compon
     ActionsComponent,
     SetupComponent,
     MenuComponent,
-    LocationsComponent
+    LocationsComponent,
+    SelectComponent,
+    ImportComponent,
+    TransferComponent,
+    ExportComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +67,9 @@ import { LocationsComponent } from './pages/warehouse/locations/locations.compon
     AuthGuard,
     NoAuthGuard,
     HasWarehouseGuard,
-    NoWarehouseGuard
+    NoWarehouseGuard,
+    HasRoleOwnerGuard,
+    HasRoleOwnerGuard
   ],
   bootstrap: [AppComponent]
 })

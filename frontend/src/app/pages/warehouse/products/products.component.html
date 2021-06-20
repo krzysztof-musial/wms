@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-semibold">Products</h1>
         <p class="text-wms-100">Here you can manage your products.</p>
     </div>
-    <div class="mb-8">
+    <div *ngIf="user.role === 'Owner'" class="mb-8">
         <form [formGroup]="addProductForm" (ngSubmit)="addProduct(addProductForm.value)" class="flex space-x-4 items-center">
             <input type="text" placeholder="Product name" formControlName="product_name" class="wms-input-app bg-wms-400">
             <input type="text" placeholder="Product code" formControlName="product_code" class="wms-input-app bg-wms-400" maxlength="4">

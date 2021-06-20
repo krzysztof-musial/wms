@@ -1,0 +1,37 @@
+<div class="max-w-screen-lg m-auto">
+    <div class="flex items-center space-x-3 mb-8 cursor-pointer" [routerLink]="['/warehouse/actions']">
+        <app-svg [src]="'back'" [primary]="'white'"></app-svg>
+        <h1 class="text-2xl font-semibold">Actions</h1>
+    </div>
+    <div class="p-8 rounded-xl bg-wms-400 border border-wms-300">
+        <div class="flex space-x-3 items-center">
+            <app-svg [src]="'arrow-down'"></app-svg>
+            <h1 class="text-xl font-semibold">Export</h1>
+        </div>
+        <p class="text-wms-200 mt-2 mb-4">Export product from your warehouse.</p>
+        <!-- form -->
+        <form class="flex flex-col space-y-4" [formGroup]="exportForm" (ngSubmit)="export(exportForm.value)">
+            <div class="flex flex-col space-y-2">
+                <label for="">Select product</label>
+                <select class="wms-input-app bg-wms-400" formControlName="product">
+                    <!-- <option value="" disabled selected hidden>Product</option> -->
+                    <option *ngFor="let product of products" [value]="product.product_id">{{ product.product_name }}</option>
+                </select>
+            </div>
+            <div class="flex flex-col space-y-2">
+                <label for="">Select amount</label>
+                <input type="number" class="wms-input-app bg-wms-400" min="1" max="100" formControlName="amount">
+            </div>
+            <div class="flex flex-col space-y-2">
+                <label for="">Select location</label>
+                <select class="wms-input-app bg-wms-400" formControlName="location">
+                    <!-- <option value="" disabled selected hidden>Location</option> -->
+                    <option *ngFor="let location of locations" [value]="location.location_id">{{ location.location_code }}</option>
+                </select>
+            </div>
+            <div class="pt-4">
+                <input class="wms-submit-app" type="submit" value="Export" [disabled]="!exportForm.valid">
+            </div>
+        </form>
+    </div>
+</div>

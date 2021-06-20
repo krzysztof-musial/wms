@@ -7,9 +7,9 @@
                 <p class="text-wms-100">Members</p>
             </div>
             <div class="flex flex-col space-y-2 justify-center w-full">
-                <div class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">1 owner</div>
-                <div class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">0 managers</div>
-                <div class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">8 workers</div>
+                <div class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">{{ ownersCount }} owner</div>
+                <div class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">{{ managersCount }} managers</div>
+                <div class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">{{ workersCount }} workers</div>
             </div>
         </div>
         <div class="p-4 rounded-xl bg-yellow-400 border border-wms-300 flex-shrink-0 flex flex-col justify-center items-center space-y-2">
@@ -59,10 +59,20 @@
                 <td class="px-4 py-4">{{ worker.firstName }} {{ worker.lastName }}</td>
                 <td class="px-4 py-4">{{ worker.email }}</td>
                 <td class="px-4 py-4">
-                    <span class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Worker</span>
+                    <span *ngIf="worker.role === 0" class="bg-white rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Worker</span>
+                    <span *ngIf="worker.role === 1" class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Manager</span>
+                    <span *ngIf="worker.role === 2" class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold">Owner</span>
                 </td>
                 <td></td>
-                <td></td>
+                <td class="px-4 py-2 text-right">
+                    <form *ngIf="user.role === 'Owner' && user.userId != worker.id" [formGroup]="changeRoleForm">
+                        <select formControlName="role" class="pl-2 pr-8 py-1 rounded text-black  text-xs font-semibold uppercase" (change)="changeRole(worker.id, changeRoleForm.value)">
+                            <option value="Owner" [selected]="worker.role === 2">Owner</option>
+                            <option value="Manager" [selected]="worker.role === 1">Manager</option>
+                            <option value="Worker" [selected]="worker.role === 0">Worker</option>
+                        </select>
+                    </form>
+                </td>
             </tr>
             <!-- Candidates -->
             <tr *ngFor="let candidate of candidates; let i = index" class="border-r border-l border-b border-wms-300 text-sm hover:bg-wms-400 transition">
@@ -74,8 +84,8 @@
                 </td>
                 <td></td>
                 <td class="p-4 flex items-center space-x-2">
-                    <button class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="acceptCandidate(candidate.id)">Accept</button>
-                    <button class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="declineCandidate(candidate.id)">Decline</button>
+                    <button *ngIf="user.role === 'Owner'" class="bg-green-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="acceptCandidate(candidate.id)">Accept</button>
+                    <button *ngIf="user.role === 'Owner'" class="bg-red-400 rounded-lg px-2 py-1 uppercase text-black text-xs font-semibold" (click)="declineCandidate(candidate.id)">Decline</button>
                 </td>
             </tr>
         </table>

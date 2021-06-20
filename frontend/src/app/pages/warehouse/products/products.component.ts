@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
@@ -9,10 +10,12 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class ProductsComponent implements OnInit {
 
+  user;
   addProductForm: FormGroup;
   products;
 
-  constructor(private ps: ProductsService, private fb: FormBuilder) {
+  constructor(private ps: ProductsService, private fb: FormBuilder, private auth: AuthService) {
+    this.user = this.auth.decodeToken();
     this.ps.getAllProducts().subscribe((products) => {
       this.products = products;
     })
