@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Common.Response;
 using WMS.UserManagement.Model.Db;
+using WMS.UserManagement.Model.Services;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -19,51 +18,43 @@ namespace WMS.UserManagement.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly WarehouseManagementSystemDataContext _dbContext;
-        private readonly UserManager<User> _userManager;
-        public CompanyController(WarehouseManagementSystemDataContext dbContext, UserManager<User> userManager)
+        private readonly ICompanyService _companyService;
+        public CompanyController(WarehouseManagementSystemDataContext dbContext, ICompanyService companyService)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
+            _companyService = companyService;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetWarehouseCompanies()
         {
             int warehouseId = GetUserWarehouseId();
-            var companies = await _dbContext.Companies.Where(x => x.WarehouseId == warehouseId).ToListAsync();
-            SuccessResponse<List<Company>> successResponse = new SuccessResponse<List<Company>>(companies);
-            return Ok(successResponse);
+            var response = await _companyService.GetWarehouseCompanies(warehouseId);
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(int id)
         {
-            var company = await _dbContext.Companies.FindAsync(id);
+            var response = await _companyService.GetCompany(id);
+            if (response.Success)
+                return Ok(response);
 
-            if (company == null)
-            {
-                return NotFound();
-            }
-            SuccessResponse<Company> successResponse = new SuccessResponse<Company>(company);
-            return Ok(successResponse);
+            return BadRequest(response);
         }
 
         [HttpPost]
         public async Task<ActionResult> AddCompany([FromBody] Company company)
         {
-            bool companyAlreadyExists = _dbContext.Companies.Any(x => x.Tin == company.Tin);
-            if(companyAlreadyExists)
-            {
-                FailedResponse failedResponse = CompanyResponse.GetCompanyWithProvidedTinAlreadyExistsResponse();
-                return BadRequest(failedResponse);
-            }
-
             int warehouseId = GetUserWarehouseId();
-            company.WarehouseId = warehouseId;
-            _dbContext.Companies.Add(company);
-            await _dbContext.SaveChangesAsync();
-            SuccessResponse<Company> successResponse = new SuccessResponse<Company>(company);
-            return Ok(successResponse);
+            var response = await _companyService.AddCompany(company, warehouseId);
+            if (response.Success)
+                return Ok(response);
+
+            return BadRequest(response);
         }
 
         private int GetUserWarehouseId()

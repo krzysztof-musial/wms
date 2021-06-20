@@ -10,6 +10,8 @@ using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.Model.Common.Response;
 using WMS.UserManagement.Utils;
+using WMS.UserManagement.Model.Services;
+using WMS.UserManagement.Model.Role;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -19,10 +21,12 @@ namespace WMS.UserManagement.Controllers
     public class WarehousesController : ControllerBase
     {
         private readonly WarehouseManagementSystemDataContext _dbContext;
+        private readonly IUserService _userService;
 
-        public WarehousesController(WarehouseManagementSystemDataContext context)
+        public WarehousesController(WarehouseManagementSystemDataContext context, IUserService userService)
         {
             _dbContext = context;
+            _userService = userService;
         }
 
         // GET: api/Warehouses
@@ -96,15 +100,15 @@ namespace WMS.UserManagement.Controllers
             var userHasCreatedWarehouse = _dbContext.Warehouses.Any(x => x.UserId == userId);
             if (userHasCreatedWarehouse)
             {
-                FailedResponse response = WarehouseResponse.GetUserAlreadyCreatedWarehouseResponse();
-                return BadRequest(response);
+                FailedResponse failerdResponse = WarehouseResponse.GetUserAlreadyCreatedWarehouseResponse();
+                return BadRequest(failerdResponse);
             }
 
             var warehouseAlreadyExists = _dbContext.Warehouses.Any(x => x.Name == warehouse.Name);
             if (warehouseAlreadyExists)
             {
-                FailedResponse response = WarehouseResponse.GetWarehouseAlreadyExistsResponse();
-                return BadRequest(response);
+                FailedResponse failerdResponse = WarehouseResponse.GetWarehouseAlreadyExistsResponse();
+                return BadRequest(failerdResponse);
             }
             warehouse.UserId = userId;
             var addedWarehouse = _dbContext.Warehouses.Add(warehouse);
@@ -113,6 +117,15 @@ namespace WMS.UserManagement.Controllers
             user.WarehouseId = addedWarehouse.Entity.Id;
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
+
+            AssignRoleRequest assignRoleRequest = new AssignRoleRequest()
+            {
+                UserId = userId,
+                Role = Model.Common.Enums.RoleType.Owner
+            };
+            var response = await _userService.AssignRole(assignRoleRequest);
+            if (!response.Success)
+                return BadRequest(response);
 
             SuccessResponse<Warehouse> successResponse = new SuccessResponse<Warehouse>(warehouse);
             return Ok(successResponse);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMS.UserManagement.DTO;
 
 namespace WMS.UserManagement.Migrations
 {
     [DbContext(typeof(WarehouseManagementSystemDataContext))]
-    partial class WarehouseManagementSystemDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210619085742_AddedRoleStringColumn")]
+    partial class AddedRoleStringColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -496,9 +498,6 @@ namespace WMS.UserManagement.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<string>("RoleKind")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -511,6 +510,9 @@ namespace WMS.UserManagement.Migrations
 
                     b.Property<int?>("WarehouseId")
                         .HasColumnType("int");
+
+                    b.Property<string>("roleKind")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

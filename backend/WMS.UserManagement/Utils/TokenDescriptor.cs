@@ -18,7 +18,8 @@ namespace WMS.UserManagement.Utils
                             new Claim("userEmail", user.Email),
                             new Claim("userFirstName", user.FirstName),
                             new Claim("userLastName", user.LastName),
-                            new Claim("warehouseId", warehouse == null ? "" : warehouse.Id.ToString())
+                            new Claim("warehouseId", warehouse == null ? "" : warehouse.Id.ToString()),
+                            new Claim("role", user.Role.ToString())
                             }
                         ),
                 SigningCredentials = signingCredentials

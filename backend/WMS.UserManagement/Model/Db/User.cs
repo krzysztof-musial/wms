@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WMS.UserManagement.Model.Authentication;
 using WMS.UserManagement.Model.Common.Enums;
+using WMS.UserManagement.Model.Role;
 
 namespace WMS.UserManagement.Model.Db
 {
@@ -18,6 +19,12 @@ namespace WMS.UserManagement.Model.Db
         public override string SecurityStamp { get; set; }
         [JsonIgnore]
         public override string PasswordHash { get; set; }
+        public string RoleKind { get; set; }
         public RoleType Role { get; set; }
+        public string RoleType { get
+            {
+                return this.Role.ToString();
+            } 
+        }
     }
 }

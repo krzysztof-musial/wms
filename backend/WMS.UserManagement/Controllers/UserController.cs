@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
 using WMS.UserManagement.Model.Services;
 using System.Linq;
+using WMS.UserManagement.Model.Common.Enums;
+using WMS.UserManagement.Model.Role;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -25,8 +27,9 @@ namespace WMS.UserManagement.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IEmailConfiguration _emailConfiguration;
         private IUserService _userService;
+        //private IRoleService _roleService;
 
-        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext, IEmailConfiguration emailConfiguration, IUserService userService)
+        public UserController(IConfiguration configuration, UserManager<User> userManager, WarehouseManagementSystemDataContext dbContext, IEmailConfiguration emailConfiguration, IUserService userService/*, RoleService roleService*/)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -69,6 +72,7 @@ namespace WMS.UserManagement.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleKind.Owner)]
         [Route("AssignToWarehouse")]
         [Authorize]
         public async Task<ActionResult<SuccessResponse<AssignUserToWarehouse>>> AssignUser([FromBody]AssignUserToWarehouse assignUserToWarehouse)

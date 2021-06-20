@@ -15,22 +15,25 @@ using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Authentication;
 using WMS.UserManagement.Model.Common.Response;
 using WMS.UserManagement.Model.Db;
+using WMS.UserManagement.Model.Role;
 using WMS.UserManagement.Model.Warehouse;
 using WMS.UserManagement.Utils;
 
 namespace WMS.UserManagement.Model.Services
 {
-    public class UserService : IUserService
+    public class UserService : IUserService, IRoleService
     {
         private WarehouseManagementSystemDataContext _dbContext;
         private UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly RoleService _roleService;
 
-        public UserService(WarehouseManagementSystemDataContext dbContext, UserManager<User> userManager, IConfiguration configuration)
+        public UserService(WarehouseManagementSystemDataContext dbContext, UserManager<User> userManager, IConfiguration configuration/*, RoleService roleService*/)
         {
             _dbContext = dbContext;
             _userManager = userManager;
             _configuration = configuration;
+            //_roleService = roleService;
 
         }
         public async Task<IResponse> AssignUserToWarehouse(AssignUserToWarehouse assignUserToWarehouse, ClaimsPrincipal userClaimsPrincipal)
@@ -63,6 +66,16 @@ namespace WMS.UserManagement.Model.Services
             user.WarehouseId = warehouse.Id;
             var operationResponse = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
+
+            //AssignRoleRequest assignRoleRequest = new AssignRoleRequest()
+            //{
+            //    UserId = assignUserToWarehouse.UserId,
+            //    Role = Model.Common.Enums.RoleType.Worker
+            //};
+            //var assignRoleResponse = await _roleService.AssignRole(assignRoleRequest);
+            //if (!assignRoleResponse.Success)
+            //    return assignRoleResponse;
+
             AssignUserToWarehouseResult assignUserToWarehouseResult = new AssignUserToWarehouseResult
             {
                 UserId = assignUserToWarehouse.UserId,
@@ -286,8 +299,9 @@ namespace WMS.UserManagement.Model.Services
                 new Claim("userId", user.Id.ToString()),
                 new Claim("userEmail", user.Email),
                 new Claim("userFirstName", user.FirstName),
-                            new Claim("userLastName", user.LastName),
-                            new Claim("warehouseId", warehouse == null ? "" : warehouse.Id.ToString())
+                new Claim("userLastName", user.LastName),
+                new Claim("warehouseId", warehouse == null ? "" : warehouse.Id.ToString()),
+                new Claim("role", user.Role.ToString())
             });
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.CreateJwtSecurityToken(
@@ -318,7 +332,36 @@ namespace WMS.UserManagement.Model.Services
                 return refreshToken;
             }
         }
-        
+
+        public async Task<IResponse> AssignRole(AssignRoleRequest assignRoleRequest)
+        {
+            if (assignRoleRequest == null)
+            {
+                FailedResponse response = RoleResponse.GetMissingPropertiesFailedResponse();
+                return response;
+            }
+
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == assignRoleRequest.UserId);
+
+            if (user == null)
+            {
+                FailedResponse response = UserResponse.GetUserNotFoundErrorResponse();
+                return response;
+            }
+
+            user.Role = assignRoleRequest.Role;
+            user.RoleKind = assignRoleRequest.Role.ToString();
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            var assignRoleResponse = new AssignRoleResponse()
+            {
+                Role = assignRoleRequest.Role,
+                UserId = assignRoleRequest.UserId
+            };
+            var successResponse = new SuccessResponse<AssignRoleResponse>(assignRoleResponse);
+            return successResponse;
+        }
+
         private IEnumerable<Claim> GetUserDetailsFromAccessToken(string token)
         {
             var tokenValidationParameters = GetTokenValidationParameters();

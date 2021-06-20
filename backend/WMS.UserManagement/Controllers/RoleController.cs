@@ -7,6 +7,7 @@ using WMS.UserManagement.DTO;
 using WMS.UserManagement.Model.Common.Response;
 using WMS.UserManagement.Model.Db;
 using WMS.UserManagement.Model.Role;
+using WMS.UserManagement.Model.Services;
 
 namespace WMS.UserManagement.Controllers
 {
@@ -16,35 +17,22 @@ namespace WMS.UserManagement.Controllers
     public class RoleController : ControllerBase
     {
         private readonly WarehouseManagementSystemDataContext _dbContext;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
-        public RoleController(WarehouseManagementSystemDataContext dbContext, UserManager<User> userManager)
+        public RoleController(WarehouseManagementSystemDataContext dbContext, IUserService userService)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
+            _userService = userService;
         }
         [HttpPost("AssignRole")]
+        [Authorize(Roles = RoleKind.Owner)]
         public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequest assignRoleRequest)
         {
-            // TO DO - dodawać do access tokena roli
-            if(assignRoleRequest == null)
-            {
-                FailedResponse response = RoleResponse.GetMissingPropertiesFailedResponse();
-                return BadRequest(response);
-            }
+            var response = await _userService.AssignRole(assignRoleRequest);
+            if (response.Success)
+                return Ok(response);
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.Id == assignRoleRequest.UserId);
-
-            if(user == null)
-            {
-                FailedResponse response = UserResponse.GetUserNotFoundErrorResponse();
-                return BadRequest(response);
-            }
-
-            user.Role = assignRoleRequest.Role;
-            _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-            return Ok();
+            return BadRequest(response);
         }
     }
 }

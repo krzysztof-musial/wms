@@ -66,7 +66,10 @@ namespace WMS.UserManagement
             };
 
             services.AddScoped<IEmailConfiguration, EmailConfiguration>();
+            //services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IInvitationService, InvitationService>();
             services.AddSingleton(emailConf);
         }
 
