@@ -14,6 +14,7 @@ export class StorageComponent implements OnInit {
   constructor(private fb: FormBuilder, private ss: StorageService) {
     this.ss.getAllArticles().subscribe((articles) => {
       this.articles = articles;
+      console.log(articles)
     })
   }
 
