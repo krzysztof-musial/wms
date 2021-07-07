@@ -14,7 +14,6 @@ namespace WMS.UserManagement.Model.Db
         [Required]
         public Warehouse Warehouse { get; set; }
         [Column("company_id")]
-        [Required]
         public Company Company { get; set; }
         [Column("uom_id")]
         [Required]

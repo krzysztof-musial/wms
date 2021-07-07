@@ -61,6 +61,15 @@ namespace WMS.UserManagement.Controllers
             return BadRequest(response);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(int id, User user)
+        {
+            var response = await _userService.EditUser(id, user);
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
+        }
+
         [HttpPost]
         [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPasswordUser)

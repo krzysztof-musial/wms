@@ -51,11 +51,10 @@ namespace WMS.UserManagement.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = RoleKind.Owner + "," + RoleKind.Manager)]
         [HttpPost]
         public async Task<ActionResult> AddInvitation([FromBody] Invitation invitation)
         {
-            int userId = GetUserWarehouseId();
+            int userId = GetUserId();
             var response = await _invitationService.AddInvitation(invitation, userId);
             if (response.Success)
                 return Ok(response);
@@ -88,6 +87,11 @@ namespace WMS.UserManagement.Controllers
         private int GetUserWarehouseId()
         {
             return int.Parse(User.Claims.FirstOrDefault(x => x.Type == "warehouseId").Value);
+        }
+
+        private int GetUserId()
+        {
+            return int.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value);
         }
     }
 }

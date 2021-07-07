@@ -80,9 +80,32 @@ namespace WMS.UserManagement.Model.Services
             {
                 UserId = assignUserToWarehouse.UserId,
                 WarehouseId = (int)warehouse.UserId
-
             };
             SuccessResponse<AssignUserToWarehouseResult> successResponse = new SuccessResponse<AssignUserToWarehouseResult>(assignUserToWarehouseResult);
+            return successResponse;
+        }
+
+        public async Task<IResponse> EditUser(int userId, User user)
+        {
+            _dbContext.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException error)
+            {
+                if (!UserExists(userId))
+                {
+                    return UserResponse.GetUserNotFoundErrorResponse();
+                }
+                else
+                {
+                    var response = new FailedResponse(error.Message);
+                }
+            }
+
+            var successResponse = new SuccessResponse<User>(null);
             return successResponse;
         }
 
@@ -387,6 +410,11 @@ namespace WMS.UserManagement.Model.Services
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Secret"]))
             };
             return tokenValidationParameters;
+        }
+
+        private bool UserExists(int id)
+        {
+            return _dbContext.Users.Any(e => e.Id == id);
         }
     }
 }
