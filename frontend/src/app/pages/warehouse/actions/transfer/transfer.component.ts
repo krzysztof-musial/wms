@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActionsService } from 'src/app/services/actions.service';
 import { LocationsService } from 'src/app/services/locations.service';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -14,7 +15,7 @@ export class TransferComponent implements OnInit {
   locations;
   products;
 
-  constructor(private fb: FormBuilder, private ls: LocationsService, private ps: ProductsService) {
+  constructor(private fb: FormBuilder, private ls: LocationsService, private ps: ProductsService, private as: ActionsService) {
     this.transferForm = this.fb.group({
       product: ['', [Validators.required] ],
       amount: ['', [Validators.required] ],
@@ -34,6 +35,9 @@ export class TransferComponent implements OnInit {
 
   transfer(form) {
     console.log(form);
+    this.as.transfer(form).subscribe((data) => {
+      console.log(data);
+    })
   }
 
 }

@@ -1193,9 +1193,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/locations.service */ "tDCh");
 /* harmony import */ var src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/products.service */ "S3Px");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/actions.service */ "VoP3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "ofXK");
+
 
 
 
@@ -1226,10 +1228,11 @@ function ImportComponent_option_28_Template(rf, ctx) { if (rf & 1) {
 } }
 const _c0 = function () { return ["/warehouse/actions"]; };
 class ImportComponent {
-    constructor(fb, ls, ps) {
+    constructor(fb, ls, ps, as) {
         this.fb = fb;
         this.ls = ls;
         this.ps = ps;
+        this.as = as;
         this.importForm = this.fb.group({
             product: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
             amount: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
@@ -1246,9 +1249,12 @@ class ImportComponent {
     }
     import(form) {
         console.log(form);
+        this.as.import(form).subscribe((data) => {
+            console.log(data);
+        });
     }
 }
-ImportComponent.ɵfac = function ImportComponent_Factory(t) { return new (t || ImportComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"])); };
+ImportComponent.ɵfac = function ImportComponent_Factory(t) { return new (t || ImportComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__["ActionsService"])); };
 ImportComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: ImportComponent, selectors: [["app-import"]], decls: 31, vars: 9, consts: [[1, "max-w-screen-lg", "m-auto"], [1, "flex", "items-center", "space-x-3", "mb-8", "cursor-pointer", 3, "routerLink"], [3, "src", "primary"], [1, "text-2xl", "font-semibold"], [1, "p-8", "rounded-xl", "bg-wms-400", "border", "border-wms-300"], [1, "flex", "space-x-3", "items-center"], [3, "src"], [1, "text-xl", "font-semibold"], [1, "text-wms-200", "mt-2", "mb-4"], [1, "flex", "flex-col", "space-y-4", 3, "formGroup", "ngSubmit"], [1, "flex", "flex-col", "space-y-2"], ["for", ""], ["formControlName", "product", 1, "wms-input-app", "bg-wms-400"], [3, "value", 4, "ngFor", "ngForOf"], ["type", "number", "min", "1", "max", "100", "formControlName", "amount", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "location", 1, "wms-input-app", "bg-wms-400"], [1, "pt-4"], ["type", "submit", "value", "Import", 1, "wms-submit-app", 3, "disabled"], [3, "value"]], template: function ImportComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 1);
@@ -1314,7 +1320,7 @@ ImportComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.locations);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("disabled", !ctx.importForm.valid);
-    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJpbXBvcnQuY29tcG9uZW50LnNjc3MifQ== */"] });
+    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_7__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJpbXBvcnQuY29tcG9uZW50LnNjc3MifQ== */"] });
 
 
 /***/ }),
@@ -2049,6 +2055,44 @@ AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjecta
 
 /***/ }),
 
+/***/ "VoP3":
+/*!*********************************************!*\
+  !*** ./src/app/services/actions.service.ts ***!
+  \*********************************************/
+/*! exports provided: ActionsService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionsService", function() { return ActionsService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+class ActionsService {
+    constructor(http, router) {
+        this.http = http;
+        this.router = router;
+        this.url = 'https://jannso.profipoint.pl:8282/tam/';
+    }
+    import(data) {
+        return this.http.post(this.url + 'import', data);
+    }
+    transfer(data) {
+        return this.http.post(this.url + 'move', data);
+    }
+    export(data) {
+        return this.http.post(this.url + 'export', data);
+    }
+}
+ActionsService.ɵfac = function ActionsService_Factory(t) { return new (t || ActionsService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])); };
+ActionsService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: ActionsService, factory: ActionsService.ɵfac, providedIn: 'root' });
+
+
+/***/ }),
+
 /***/ "YtXQ":
 /*!************************************************************************!*\
   !*** ./src/app/pages/warehouse/actions/transfer/transfer.component.ts ***!
@@ -2063,9 +2107,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/locations.service */ "tDCh");
 /* harmony import */ var src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/products.service */ "S3Px");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/actions.service */ "VoP3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "ofXK");
+
 
 
 
@@ -2106,10 +2152,11 @@ function TransferComponent_option_31_Template(rf, ctx) { if (rf & 1) {
 } }
 const _c0 = function () { return ["/warehouse/actions"]; };
 class TransferComponent {
-    constructor(fb, ls, ps) {
+    constructor(fb, ls, ps, as) {
         this.fb = fb;
         this.ls = ls;
         this.ps = ps;
+        this.as = as;
         this.transferForm = this.fb.group({
             product: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
             amount: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
@@ -2127,10 +2174,13 @@ class TransferComponent {
     }
     transfer(form) {
         console.log(form);
+        this.as.transfer(form).subscribe((data) => {
+            console.log(data);
+        });
     }
 }
-TransferComponent.ɵfac = function TransferComponent_Factory(t) { return new (t || TransferComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"])); };
-TransferComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: TransferComponent, selectors: [["app-transfer"]], decls: 34, vars: 10, consts: [[1, "max-w-screen-lg", "m-auto"], [1, "flex", "items-center", "space-x-3", "mb-8", "cursor-pointer", 3, "routerLink"], [3, "src", "primary"], [1, "text-2xl", "font-semibold"], [1, "p-8", "rounded-xl", "bg-wms-400", "border", "border-wms-300"], [1, "flex", "space-x-3", "items-center"], [3, "src"], [1, "text-xl", "font-semibold"], [1, "text-wms-200", "mt-2", "mb-4"], [1, "flex", "flex-col", "space-y-4", 3, "formGroup", "ngSubmit"], [1, "flex", "flex-col", "space-y-2"], ["for", ""], ["formControlName", "product", 1, "wms-input-app", "bg-wms-400"], [3, "value", 4, "ngFor", "ngForOf"], ["type", "number", "min", "1", "max", "100", "formControlName", "amount", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "locationFrom", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "locationTo", 1, "wms-input-app", "bg-wms-400"], [1, "pt-4"], ["type", "submit", "value", "Export", 1, "wms-submit-app", 3, "disabled"], [3, "value"]], template: function TransferComponent_Template(rf, ctx) { if (rf & 1) {
+TransferComponent.ɵfac = function TransferComponent_Factory(t) { return new (t || TransferComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__["ActionsService"])); };
+TransferComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: TransferComponent, selectors: [["app-transfer"]], decls: 34, vars: 10, consts: [[1, "max-w-screen-lg", "m-auto"], [1, "flex", "items-center", "space-x-3", "mb-8", "cursor-pointer", 3, "routerLink"], [3, "src", "primary"], [1, "text-2xl", "font-semibold"], [1, "p-8", "rounded-xl", "bg-wms-400", "border", "border-wms-300"], [1, "flex", "space-x-3", "items-center"], [3, "src"], [1, "text-xl", "font-semibold"], [1, "text-wms-200", "mt-2", "mb-4"], [1, "flex", "flex-col", "space-y-4", 3, "formGroup", "ngSubmit"], [1, "flex", "flex-col", "space-y-2"], ["for", ""], ["formControlName", "product", 1, "wms-input-app", "bg-wms-400"], [3, "value", 4, "ngFor", "ngForOf"], ["type", "number", "min", "1", "max", "100", "formControlName", "amount", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "locationFrom", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "locationTo", 1, "wms-input-app", "bg-wms-400"], [1, "pt-4"], ["type", "submit", "value", "Transfer", 1, "wms-submit-app", 3, "disabled"], [3, "value"]], template: function TransferComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "app-svg", 2);
@@ -2203,7 +2253,7 @@ TransferComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefine
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.locations);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("disabled", !ctx.transferForm.valid);
-    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ0cmFuc2Zlci5jb21wb25lbnQuc2NzcyJ9 */"] });
+    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_7__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ0cmFuc2Zlci5jb21wb25lbnQuc2NzcyJ9 */"] });
 
 
 /***/ }),
@@ -3172,6 +3222,7 @@ class StorageComponent {
         this.ss = ss;
         this.ss.getAllArticles().subscribe((articles) => {
             this.articles = articles;
+            console.log(articles);
         });
     }
     ngOnInit() {
@@ -3653,9 +3704,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/locations.service */ "tDCh");
 /* harmony import */ var src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/products.service */ "S3Px");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/actions.service */ "VoP3");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/svg/svg.component */ "4/Rz");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "ofXK");
+
 
 
 
@@ -3686,10 +3739,11 @@ function ExportComponent_option_26_Template(rf, ctx) { if (rf & 1) {
 } }
 const _c0 = function () { return ["/warehouse/actions"]; };
 class ExportComponent {
-    constructor(fb, ls, ps) {
+    constructor(fb, ls, ps, as) {
         this.fb = fb;
         this.ls = ls;
         this.ps = ps;
+        this.as = as;
         this.exportForm = this.fb.group({
             product: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
             amount: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_0__["Validators"].required]],
@@ -3706,9 +3760,12 @@ class ExportComponent {
     }
     export(form) {
         console.log(form);
+        this.as.export(form).subscribe((data) => {
+            console.log(data);
+        });
     }
 }
-ExportComponent.ɵfac = function ExportComponent_Factory(t) { return new (t || ExportComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"])); };
+ExportComponent.ɵfac = function ExportComponent_Factory(t) { return new (t || ExportComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_locations_service__WEBPACK_IMPORTED_MODULE_2__["LocationsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_products_service__WEBPACK_IMPORTED_MODULE_3__["ProductsService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_services_actions_service__WEBPACK_IMPORTED_MODULE_4__["ActionsService"])); };
 ExportComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: ExportComponent, selectors: [["app-export"]], decls: 29, vars: 9, consts: [[1, "max-w-screen-lg", "m-auto"], [1, "flex", "items-center", "space-x-3", "mb-8", "cursor-pointer", 3, "routerLink"], [3, "src", "primary"], [1, "text-2xl", "font-semibold"], [1, "p-8", "rounded-xl", "bg-wms-400", "border", "border-wms-300"], [1, "flex", "space-x-3", "items-center"], [3, "src"], [1, "text-xl", "font-semibold"], [1, "text-wms-200", "mt-2", "mb-4"], [1, "flex", "flex-col", "space-y-4", 3, "formGroup", "ngSubmit"], [1, "flex", "flex-col", "space-y-2"], ["for", ""], ["formControlName", "product", 1, "wms-input-app", "bg-wms-400"], [3, "value", 4, "ngFor", "ngForOf"], ["type", "number", "min", "1", "max", "100", "formControlName", "amount", 1, "wms-input-app", "bg-wms-400"], ["formControlName", "location", 1, "wms-input-app", "bg-wms-400"], [1, "pt-4"], ["type", "submit", "value", "Export", 1, "wms-submit-app", 3, "disabled"], [3, "value"]], template: function ExportComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "div", 1);
@@ -3772,7 +3829,7 @@ ExportComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.locations);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("disabled", !ctx.exportForm.valid);
-    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_5__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJleHBvcnQuY29tcG9uZW50LnNjc3MifQ== */"] });
+    } }, directives: [_angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLink"], _components_svg_svg_component__WEBPACK_IMPORTED_MODULE_6__["SvgComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_7__["NgForOf"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_0__["ɵangular_packages_forms_forms_z"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJleHBvcnQuY29tcG9uZW50LnNjc3MifQ== */"] });
 
 
 /***/ }),
