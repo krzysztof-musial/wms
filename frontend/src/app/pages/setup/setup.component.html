@@ -26,7 +26,7 @@
                 </div>
                 <p class="text-wms-100 mt-4 mb-6">Paste the ID of a Warehouse you want to join. Ask the owner for the code.</p>
                 <form class="flex space-x-4" [formGroup]="joinWarehouseForm" (ngSubmit)="joinWarehouse(joinWarehouseForm.value)">
-                    <input type="text" class="wms-input-app" placeholder="Paste the ID here" formControlName="warehouseId">
+                    <input type="number" class="wms-input-app" placeholder="Paste the ID here" formControlName="warehouseId">
                     <input class="wms-submit-app" type="submit" value="Join" [disabled]="!joinWarehouseForm.valid">
                 </form>
             </div>

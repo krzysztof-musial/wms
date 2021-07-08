@@ -33,6 +33,7 @@ export class WorkersComponent implements OnInit {
     })
     this.ws.getCandidates().subscribe((data: IResponse) => {
       this.candidates = data.data;
+      console.log(this.candidates)
     })
   }
 

@@ -30,6 +30,7 @@ export class SetupComponent implements OnInit {
   }
 
   joinWarehouse(form: any): void {
+    console.log(form)
     this.ws.joinWarehouse(form);
   }
 
