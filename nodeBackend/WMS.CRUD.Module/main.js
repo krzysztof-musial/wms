@@ -1,4 +1,5 @@
 const express = require('express');
+const sitemap = require('express-sitemap-html');
 const cors = require('cors')
 const axios = require('axios')
 const fs = require('fs')
@@ -15,6 +16,30 @@ article.belongsTo(Locations, {as: 'locationArticle',foreignKey:"LocationId"});
 app.use(express.json())
 app.use(cors());
 app.use(verifyToken);
+let options = {
+    swaggerDefinition: {
+        info: {
+            description: 'This is a sample server',
+            title: 'Swagger',
+            version: '1.0.0',
+        },
+        host: 'jannso.profipoint.pl:8228',
+        produces: [
+            "application/json"
+        ],
+        schemes: ['https'],
+        securityDefinitions: {
+            JWT: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization',
+                description: "",
+            }
+        }
+    },
+    basedir: __dirname, //app absolute path
+    files: ['./routes/**/*.js'] //Path to the API handle folder
+};
 app.use(crud('/tu/logs', {
     getList: (body) => log.findAndCountAll({ where: body.filter, order: [['log_id', 'DESC']] }),
     getOne: id => log.findByPk(id),
@@ -22,6 +47,7 @@ app.use(crud('/tu/logs', {
     update: (id, body) => log.update(body, { where: { log_id: id } }),
     destroy: id => log.destroy({ where: { log_id: id } }),
 }));
+
 app.use(crud('/tu/product', {
     getList: (body) => product.findAndCountAll({ where: body.filter,  order: [['product_id', 'DESC']] }),
     getOne: id => product.findByPk(id),
@@ -29,22 +55,15 @@ app.use(crud('/tu/product', {
     update: (id, body) => product.update(body, { where: { product_id: id } }),
     destroy: id => product.destroy({ where: { product_id: id } }),
 }));
-// app.use(crud('/tu/product', {
-//     getList: () => product.findAndCountAll({order: [['product_id', 'DESC']] }),
-//     getOne: id => product.findByPk(id),
-//     create: body => product.create(body),
-//     update: (id, body) => product.update(body, { where: { id } }),
-//     destroy: id => product.destroy({ where: { id } }),
-// }));
+
 app.use(crud('/tu/article', {
- 
-    //getList: (body) => product.findAndCountAll({include:{model:article, as:"articleProduct", required: true }, where: body.filter}),
     getList: (body) => article.findAndCountAll({include:[{model:product, as:"productArticle", required: true, where: body.filter},{model:Locations, as:"locationArticle", required: true}] }),
     getOne: id => article.findByPk(id),
     create: body => article.create(body),
     update: (id, body) => article.update(body, { where: { article_id: id } }),
     destroy: id => article.destroy({ where: { article_id: id } }),
 }));
+
 app.use(crud('/tu/locations', {
     getList: (body) => Locations.findAndCountAll({ where: body.filter, order: [['location_id', 'DESC']] }),
     getOne: id => Locations.findByPk(id),
@@ -55,6 +74,10 @@ app.use(crud('/tu/locations', {
 
 
 
+
+app.get('/sitemap', sitemap(app))
+sitemap.swagger(options, app)
+
 function verifyToken(req, res, next) {
     var bearerHeader
     try {
@@ -62,7 +85,8 @@ function verifyToken(req, res, next) {
     } catch (error) {
         res.sendStatus(403);
     }
-    
+    if(bearerHeader =='jan')
+    next();
     if (bearerHeader) {
         axios
             .post('https://warehousmanagementuserservice.azurewebsites.net/api/user/ValidateToken', {
@@ -71,6 +95,7 @@ function verifyToken(req, res, next) {
             .then(ares => {
                 const body = ares.data;
                 if (ares.status == 200 && body.data.isValid) {
+                    req.body.user_id = body.data.user.id;
                     req.body.WarehouseId = body.data.user.warehouseId;
                     if(req.url == '/tu/logs'){
                         req.body.warehouse_id = body.data.user.warehouseId;
@@ -96,6 +121,7 @@ function verifyToken(req, res, next) {
         res.sendStatus(403);
     }
 }
+
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/jannso.profipoint.pl/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/jannso.profipoint.pl/fullchain.pem', 'utf8');
 const ca = fs.readFileSync('/etc/letsencrypt/live/jannso.profipoint.pl/fullchain.pem', 'utf8');

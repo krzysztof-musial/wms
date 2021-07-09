@@ -14,6 +14,10 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-sequelize-crud": "^6.1.5",
+    "express-sitemap-html": "^1.2.4",
     "sequelize": "^5.22.4"
+  },
+  "devDependencies": {
+    "express-swagger-generator": "^1.1.17"
   }
 }
